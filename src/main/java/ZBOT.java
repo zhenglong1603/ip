@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 public class ZBOT {
+    private static final ArrayList<String> tasks = new ArrayList<>();
 
     public static void intro() {
         System.out.println("---------------------------------------------------");
@@ -9,8 +11,27 @@ public class ZBOT {
     }
     public static void end() {
         System.out.println("---------------------------------------------------");
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println("Bye. Hope to see you again soon :)");
         System.out.println("---------------------------------------------------");
+    }
+
+    public static void showContents() {
+        int size = tasks.size();
+        System.out.println("---------------------------------------------------");
+        System.out.println("<List>");
+        for (int i = 1; i < size + 1; i ++) {
+            System.out.println(i + ". " + tasks.get(i - 1));
+        }
+        System.out.println("---------------------------------------------------");
+
+    }
+
+    public static void addContent(String input) {
+        tasks.add(input);
+        System.out.println("---------------------------------------------------");
+        System.out.println(" Successfully Added: " + input);
+        System.out.println("---------------------------------------------------");
+
     }
 
     public static void main(String[] args) {
@@ -20,10 +41,10 @@ public class ZBOT {
 
         do {
             input = scanner.nextLine();
-            if (!input.equals("bye")) {
-                System.out.println("-----------------------");
-                System.out.println(input);
-                System.out.println("-----------------------");
+            if (input.equals("list")) {
+                showContents();
+            } else if (!input.equals("bye")){
+                addContent(input);
             }
         } while (!input.equals("bye"));
 
