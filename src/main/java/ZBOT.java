@@ -18,7 +18,7 @@ public class ZBOT {
         }
     }
 
-    private void parseInput(String input) throws IncorrectInputException, InvalidTaskException {
+    private void parseInput(String input) throws IncorrectInputException, InvalidTaskException, EmptyTaskListException, InvalidTaskNumberException {
         String[] parts = input.split(" ", 2);
         final String SUPPORTED_COMMANDS = "- list\n- mark\n- unmark\n- todo\n- deadline\n- event\n- bye";
         switch (parts[0]) {
@@ -30,21 +30,29 @@ public class ZBOT {
                             "(e.g. \"list\")");
                 }
                 break;
-            case "mark":
-                if (parts.length == 2) {
-                    markTask(Integer.parseInt(parts[1]) - 1);
-                } else {
-                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has only 1 number. " +
-                            "(e.g. \"mark 1\")");
+            case "delete":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"delete 1\"");
                 }
+
+                int deleteIndex = getIndex(parts);
+                deleteContent(deleteIndex);
+                break;
+            case "mark":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"mark 1\"");
+                }
+
+                int markIndex = getIndex(parts);
+                markTask(markIndex);
                 break;
             case "unmark":
-                if (parts.length == 2) {
-                    unmarkTask(Integer.parseInt(parts[1]) - 1);
-                } else {
-                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has only 1 number. " +
-                            "(e.g. \"unmark 1\")");
+                if (parts.length != 2) {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"unmark 1\"");
                 }
+
+                int unmarkIndex = getIndex(parts);
+                unmarkTask(unmarkIndex);
                 break;
             case "todo":
                 if (parts.length == 2) {
@@ -76,6 +84,24 @@ public class ZBOT {
         }
     }
 
+    private static int getIndex(String[] parts) throws IncorrectInputException, EmptyTaskListException, InvalidTaskNumberException {
+        int markIndex;
+        try {
+            markIndex = Integer.parseInt(parts[1]) - 1;
+        } catch (NumberFormatException e) {
+            throw new IncorrectInputException("Sorry!! The task number must be a valid integer (e.g., \"mark 1\").");
+        }
+
+        if (tasks.isEmpty()) {
+            throw new EmptyTaskListException("Sorry!! The current task list is empty. Please add some tasks first.");
+        }
+
+        if (markIndex < 0 || markIndex >= tasks.size()) {
+            throw new InvalidTaskNumberException("Sorry!! The task number is invalid. Please check the task number again.");
+        }
+        return markIndex;
+    }
+
     private void addContent(String type, String description) {
         switch(type) {
             case "todo":
@@ -83,7 +109,7 @@ public class ZBOT {
                 tasks.add(newToDoTask);
                 System.out.println("---------------------------------------------------");
                 System.out.println("Got it. I've added this task:");
-                System.out.println(newToDoTask.toString());
+                System.out.println(newToDoTask);
                 System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
                 System.out.println("---------------------------------------------------");
                 break;
@@ -93,7 +119,7 @@ public class ZBOT {
                 tasks.add(newEventTask);
                 System.out.println("---------------------------------------------------");
                 System.out.println("Got it. I've added this task:");
-                System.out.println(newEventTask.toString());
+                System.out.println(newEventTask);
                 System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
                 System.out.println("---------------------------------------------------");
                 break;
@@ -103,11 +129,21 @@ public class ZBOT {
                 tasks.add(newDeadlineTask);
                 System.out.println("---------------------------------------------------");
                 System.out.println("Got it. I've added this task:");
-                System.out.println(newDeadlineTask.toString());
+                System.out.println(newDeadlineTask);
                 System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
                 System.out.println("---------------------------------------------------");
                 break;
         }
+    }
+
+    private void deleteContent(int index) {
+        Task deletedTask = tasks.get(index);
+        tasks.remove(index);
+        System.out.println("---------------------------------------------------");
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(deletedTask.toString());
+        System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
+        System.out.println("---------------------------------------------------");
     }
 
     private void showContents() {
@@ -121,11 +157,11 @@ public class ZBOT {
     }
 
     private void markTask(int index) {
-        tasks.get(index).markDone();
-        System.out.println("---------------------------------------------------");
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println(tasks.get(index).toString());
-        System.out.println("---------------------------------------------------");
+            tasks.get(index).markDone();
+            System.out.println("---------------------------------------------------");
+            System.out.println("Nice! I've marked this task as done:");
+            System.out.println(tasks.get(index).toString());
+            System.out.println("---------------------------------------------------");
     }
 
     private void unmarkTask(int index) {
@@ -142,7 +178,6 @@ public class ZBOT {
         String input;
         boolean state = true;
         myBot.generateResponse("start");
-        ;
         while (state) {
             input = scanner.nextLine();
 
@@ -151,7 +186,7 @@ public class ZBOT {
             } else {
                 try {
                     myBot.parseInput(input);
-                } catch (InvalidTaskException | IncorrectInputException e) {
+                } catch (InvalidTaskException | IncorrectInputException | EmptyTaskListException | InvalidTaskNumberException e) {
                     System.out.println("---------------------------------------------------");
                     System.out.println(e.getMessage());
                     System.out.println("---------------------------------------------------");
