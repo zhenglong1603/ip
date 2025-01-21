@@ -18,6 +18,64 @@ public class ZBOT {
         }
     }
 
+    private void parseInput(String input) throws IncorrectInputException, InvalidTaskException {
+        String[] parts = input.split(" ", 2);
+        final String SUPPORTED_COMMANDS = "- list\n- mark\n- unmark\n- todo\n- deadline\n- event\n- bye";
+        switch (parts[0]) {
+            case "list":
+                if (parts.length == 1) {
+                    showContents();
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and have nothing else. " +
+                            "(e.g. \"list\")");
+                }
+                break;
+            case "mark":
+                if (parts.length == 2) {
+                    markTask(Integer.parseInt(parts[1]) - 1);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has only 1 number. " +
+                            "(e.g. \"mark 1\")");
+                }
+                break;
+            case "unmark":
+                if (parts.length == 2) {
+                    unmarkTask(Integer.parseInt(parts[1]) - 1);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has only 1 number. " +
+                            "(e.g. \"unmark 1\")");
+                }
+                break;
+            case "todo":
+                if (parts.length == 2) {
+                    addContent(parts[0], parts[1]);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description after your command. " +
+                            "(e.g. \"todo read a book\")");
+                }
+                break;
+            case "deadline":
+                if (parts.length == 2) {
+                    addContent(parts[0], parts[1]);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description and deadline after your command. " +
+                            "(e.g. \"deadline description /by \"deadline\" \")");
+                }
+                break;
+            case "event":
+                if (parts.length == 2) {
+                    addContent(parts[0], parts[1]);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description with the timeline after your command. " +
+                            "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                }
+                break;
+            default:
+                throw new InvalidTaskException("Sorry!!  I didn't recognise that request. These are the " +
+                        "following supported commands:\n" + SUPPORTED_COMMANDS);
+        }
+    }
+
     private void addContent(String type, String description) {
         switch(type) {
             case "todo":
@@ -82,26 +140,24 @@ public class ZBOT {
         Scanner scanner = new Scanner(System.in);
         ZBOT myBot = new ZBOT();
         String input;
-        myBot.generateResponse("start");;
-
-        do {
+        boolean state = true;
+        myBot.generateResponse("start");
+        ;
+        while (state) {
             input = scanner.nextLine();
-            String[] parts = input.split(" ", 2);
-            if (input.equals("list")) {
-                myBot.showContents();
-            } else if (parts[0].equals("mark")){
-                myBot.markTask(Integer.parseInt(parts[1]) - 1);
-            } else if (parts[0].equals("unmark")) {
-                myBot.unmarkTask(Integer.parseInt(parts[1]) - 1);
-            } else if (parts[0].equals("todo")) {
-                myBot.addContent(parts[0], parts[1]);
-            } else if (parts[0].equals("deadline")) {
-                myBot.addContent(parts[0], parts[1]);
-            } else if (parts[0].equals("event")) {
-                myBot.addContent(parts[0], parts[1]);
-            }
-        } while (!input.equals("bye"));
 
+            if (input.equals("bye")) {
+                state = false;
+            } else {
+                try {
+                    myBot.parseInput(input);
+                } catch (InvalidTaskException | IncorrectInputException e) {
+                    System.out.println("---------------------------------------------------");
+                    System.out.println(e.getMessage());
+                    System.out.println("---------------------------------------------------");
+                }
+            }
+        }
         myBot.generateResponse("end");
     }
 }
