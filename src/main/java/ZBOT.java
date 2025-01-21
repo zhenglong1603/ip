@@ -18,20 +18,47 @@ public class ZBOT {
         }
     }
 
+    private void addContent(String type, String description) {
+        switch(type) {
+            case "todo":
+                Task newToDoTask = new ToDoTask(description);
+                tasks.add(newToDoTask);
+                System.out.println("---------------------------------------------------");
+                System.out.println("Got it. I've added this task:");
+                System.out.println(newToDoTask.toString());
+                System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
+                System.out.println("---------------------------------------------------");
+                break;
+            case "event":
+                String[] eventParts = description.split(" /");
+                Task newEventTask = new EventTask(eventParts[0], eventParts[1].substring(5), eventParts[2].substring(3));
+                tasks.add(newEventTask);
+                System.out.println("---------------------------------------------------");
+                System.out.println("Got it. I've added this task:");
+                System.out.println(newEventTask.toString());
+                System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
+                System.out.println("---------------------------------------------------");
+                break;
+            case "deadline":
+                String[] parts = description.split(" /by ");
+                Task newDeadlineTask = new DeadlineTask(parts[0], parts[1]);
+                tasks.add(newDeadlineTask);
+                System.out.println("---------------------------------------------------");
+                System.out.println("Got it. I've added this task:");
+                System.out.println(newDeadlineTask.toString());
+                System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
+                System.out.println("---------------------------------------------------");
+                break;
+        }
+    }
+
     private void showContents() {
         int size = tasks.size();
         System.out.println("---------------------------------------------------");
         System.out.println("Here are the tasks in your list:");
-        for (int i = 1; i < size + 1; i ++) {
+        for (int i = 1; i < size + 1; i++) {
             System.out.println(i + ". " + tasks.get(i - 1).toString());
         }
-        System.out.println("---------------------------------------------------");
-    }
-
-    private void addContent(String input) {
-        tasks.add(new Task(input));
-        System.out.println("---------------------------------------------------");
-        System.out.println(" Successfully Added: " + input);
         System.out.println("---------------------------------------------------");
     }
 
@@ -59,15 +86,19 @@ public class ZBOT {
 
         do {
             input = scanner.nextLine();
-            String[] parts = input.split(" ");
+            String[] parts = input.split(" ", 2);
             if (input.equals("list")) {
                 myBot.showContents();
             } else if (parts[0].equals("mark")){
                 myBot.markTask(Integer.parseInt(parts[1]) - 1);
             } else if (parts[0].equals("unmark")) {
                 myBot.unmarkTask(Integer.parseInt(parts[1]) - 1);
-            } else if (!input.equals("bye")){
-                myBot.addContent(input);
+            } else if (parts[0].equals("todo")) {
+                myBot.addContent(parts[0], parts[1]);
+            } else if (parts[0].equals("deadline")) {
+                myBot.addContent(parts[0], parts[1]);
+            } else if (parts[0].equals("event")) {
+                myBot.addContent(parts[0], parts[1]);
             }
         } while (!input.equals("bye"));
 
