@@ -1,7 +1,11 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 public class ZBOT {
-    private static final ArrayList<Task> tasks = new ArrayList<>();
+    private final ArrayList<Task> tasks = new ArrayList<>();
     private void generateResponse(String input) {
         switch(input) {
             case "start":
@@ -84,7 +88,7 @@ public class ZBOT {
         }
     }
 
-    private static int getIndex(String[] parts) throws IncorrectInputException, EmptyTaskListException, InvalidTaskNumberException {
+    private int getIndex(String[] parts) throws IncorrectInputException, EmptyTaskListException, InvalidTaskNumberException {
         int markIndex;
         try {
             markIndex = Integer.parseInt(parts[1]) - 1;
@@ -172,17 +176,107 @@ public class ZBOT {
         System.out.println("---------------------------------------------------");
     }
 
+    private void loadExistingFile(String filePath) throws IOException {
+        try {
+            File f = new File(filePath);
+            Scanner s = new Scanner(f);
+            while (s.hasNext()) {
+                String curr = s.nextLine();
+                String[] parts = curr.split(" \\| ");
+                switch (parts[0]) {
+                    case "T" -> {
+                        ToDoTask i = new ToDoTask(parts[2]);
+                        if (parts[1].equals("1")) {
+                            i.markDone();
+                        }
+                        tasks.add(i);
+                    }
+                    case "D" -> {
+                        DeadlineTask i = new DeadlineTask(parts[2], parts[3]);
+                        if (parts[1].equals("1")) {
+                            i.markDone();
+                        }
+                        tasks.add(i);
+                    }
+                    case "E" -> {
+                        EventTask i = new EventTask(parts[2], parts[3], parts[4]);
+                        if (parts[1].equals("1")) {
+                            i.markDone();
+                        }
+                        tasks.add(i);
+                    }
+                    default -> throw new IOException("File format is invalid");
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not load existing data");
+        }
+    }
+
+    private void saveToFile(String filePath) throws IOException {
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+        if (parentDir != null && !parentDir.exists()) {
+            if (!parentDir.mkdirs()) {
+                throw new IOException("Sorry !! Failed to create directory: " + parentDir.getAbsolutePath());
+            }
+        }
+        try {
+            FileWriter fileWriter = new FileWriter(filePath);
+            StringBuilder s = new StringBuilder();
+            for (Task task : tasks) {
+                if (task instanceof ToDoTask) {
+                    s.append("T | ")
+                            .append(task.getDoneStatus() ? "1 | " : "0 | ")
+                            .append(task.getDescription())
+                            .append("\n");
+                } else if (task instanceof DeadlineTask) {
+                    s.append("D | ")
+                            .append(task.getDoneStatus() ? "1 | " : "0 | ")
+                            .append(task.getDescription())
+                            .append(" | ")
+                            .append(((DeadlineTask) task).getDeadline())
+                            .append("\n");
+                } else if (task instanceof EventTask) {
+                    s.append("E | ")
+                            .append(task.getDoneStatus() ? "1 | " : "0 | ")
+                            .append(task.getDescription())
+                            .append(" | ")
+                            .append(((EventTask) task).getFromDate())
+                            .append(" | ")
+                            .append(((EventTask) task).getToDate())
+                            .append("\n");
+                }
+            }
+            fileWriter.write(s.toString());
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new IOException("Sorry!! Error occurred while writing to the file: " + e.getMessage(), e);
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        String filePath = "./data/ZBOT.txt";
         ZBOT myBot = new ZBOT();
         String input;
-        boolean state = true;
+        boolean isRunning = true;
         myBot.generateResponse("start");
-        while (state) {
+
+        try {
+            myBot.loadExistingFile(filePath);
+            myBot.showContents();
+        } catch (IOException e) {
+            System.out.println("---------------------------------------------------");
+            System.out.println(e.getMessage());
+            System.out.println("---------------------------------------------------");
+        }
+
+        while (isRunning) {
             input = scanner.nextLine();
 
             if (input.equals("bye")) {
-                state = false;
+                isRunning = false;
             } else {
                 try {
                     myBot.parseInput(input);
@@ -193,6 +287,15 @@ public class ZBOT {
                 }
             }
         }
+
+        try {
+            myBot.saveToFile(filePath);
+        } catch (IOException e) {
+            System.out.println("-----------------------");
+            System.out.println(e.getMessage());
+            System.out.println("-----------------------");
+        }
+
         myBot.generateResponse("end");
     }
 }
