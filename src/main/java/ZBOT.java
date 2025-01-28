@@ -1,9 +1,14 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ZBOT {
     private final ArrayList<Task> tasks = new ArrayList<>();
     private void generateResponse(String input) {
@@ -118,24 +123,40 @@ public class ZBOT {
                 System.out.println("---------------------------------------------------");
                 break;
             case "event":
-                String[] eventParts = description.split(" /");
-                Task newEventTask = new EventTask(eventParts[0], eventParts[1].substring(5), eventParts[2].substring(3));
-                tasks.add(newEventTask);
-                System.out.println("---------------------------------------------------");
-                System.out.println("Got it. I've added this task:");
-                System.out.println(newEventTask);
-                System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
-                System.out.println("---------------------------------------------------");
+                Task newEventTask = null;
+                try {
+                    String[] eventParts = description.split(" /");
+                    newEventTask = new EventTask(eventParts[0], eventParts[1].substring(5), eventParts[2].substring(3));
+                    tasks.add(newEventTask);
+                } catch (DateTimeParseException e) {
+                    System.out.println("Sorry!! Please use yyyy-MM-dd as the proper date format");
+                } finally {
+                    if(newEventTask != null) {
+                        System.out.println("---------------------------------------------------");
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println(newEventTask);
+                        System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
+                        System.out.println("---------------------------------------------------");
+                    }
+                }
                 break;
             case "deadline":
-                String[] parts = description.split(" /by ");
-                Task newDeadlineTask = new DeadlineTask(parts[0], parts[1]);
-                tasks.add(newDeadlineTask);
-                System.out.println("---------------------------------------------------");
-                System.out.println("Got it. I've added this task:");
-                System.out.println(newDeadlineTask);
-                System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
-                System.out.println("---------------------------------------------------");
+                Task newDeadlineTask = null;
+                try {
+                    String[] parts = description.split("/by ");
+                    newDeadlineTask = new DeadlineTask(parts[0], parts[1]);
+                    tasks.add(newDeadlineTask);
+                } catch (DateTimeParseException e) {
+                    System.out.println("Sorry!! Please use yyyy-MM-dd as the proper date format");
+                } finally {
+                    if(newDeadlineTask != null) {
+                        System.out.println("---------------------------------------------------");
+                        System.out.println("Got it. I've added this task:");
+                        System.out.println(newDeadlineTask);
+                        System.out.printf("Now you have %d tasks in the list.%n", tasks.size());
+                        System.out.println("---------------------------------------------------");
+                    }
+                }
                 break;
         }
     }
@@ -177,6 +198,7 @@ public class ZBOT {
     }
 
     private void loadExistingFile(String filePath) throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             File f = new File(filePath);
             Scanner s = new Scanner(f);
