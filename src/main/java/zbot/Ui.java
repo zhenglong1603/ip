@@ -1,3 +1,7 @@
+package zbot;
+import zbot.tasks.Task;
+import zbot.tasks.TaskList;
+
 public class Ui {
     public void generateResponse(String input) {
         switch(input) {

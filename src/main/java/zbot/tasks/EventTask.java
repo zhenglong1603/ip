@@ -1,7 +1,8 @@
+package zbot.tasks;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class EventTask extends Task{
+public class EventTask extends Task {
 
     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");

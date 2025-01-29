@@ -1,7 +1,9 @@
+package zbot.tasks;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class DeadlineTask extends Task{
+
+public class DeadlineTask extends Task {
     LocalDate deadline;
     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");

@@ -1,3 +1,6 @@
+package zbot;
+import zbot.exceptions.*;
+import zbot.tasks.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
