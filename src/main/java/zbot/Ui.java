@@ -2,6 +2,8 @@ package zbot;
 import zbot.tasks.Task;
 import zbot.tasks.TaskList;
 
+import java.util.List;
+
 public class Ui {
     public void generateResponse(String input) {
         switch(input) {
@@ -35,4 +37,14 @@ public class Ui {
         System.out.println("---------------------------------------------------");
     }
 
+    public void displayFind(List<Task> taskList) {
+        System.out.println("---------------------------------------------------");
+        System.out.println("Here are the tasks that matches the keyword:");
+        int index = 1;
+        for (Task task : taskList) {
+            System.out.println(index + ". " + task.toString());
+            index++;
+        }
+        System.out.println("---------------------------------------------------");
+    }
 }

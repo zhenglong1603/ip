@@ -91,6 +91,16 @@ public class TaskList {
         System.out.println("---------------------------------------------------");
     }
 
+    public List<Task> findTasks(String word) {
+        List<Task> ans = new ArrayList<>();
+        for (Task curr : this.taskList) {
+            if (curr.getDescription().contains(word)) {
+                ans.add(curr);
+            }
+        }
+        return ans;
+    }
+
     public void clearTasks() {
         this.taskList.clear();
     }

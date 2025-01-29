@@ -1,7 +1,5 @@
 package zbot;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import zbot.tasks.*;
 import java.io.ByteArrayOutputStream;
@@ -11,7 +9,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskCommandTest {
-
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     private final TaskList tasks = new TaskList();
 
@@ -60,8 +57,6 @@ public class TaskCommandTest {
                 "[T][ ] test",
                 "---------------------------------------------------"
         );
-
-        // Assert
         assertEquals(expected.trim(), outputStreamCaptor.toString().trim());
     }
 }

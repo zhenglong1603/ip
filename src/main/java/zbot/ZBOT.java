@@ -17,7 +17,6 @@ public class ZBOT {
         }  catch (ZBOTFileNotFoundException | IOException e){
             ui.generateResponse("loadingError");
             this.taskList = new TaskList();
-
         }
     }
 
@@ -53,7 +52,6 @@ public class ZBOT {
         }
 
         ui.generateResponse("end");
-
     }
 
     public static void main(String[] args) {

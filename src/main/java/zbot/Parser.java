@@ -5,7 +5,7 @@ import zbot.tasks.TaskList;
 public class Parser {
     public static void parseInput(String input, Ui ui, TaskList taskList) throws IncorrectInputException, InvalidTaskException, EmptyTaskListException, InvalidTaskNumberException {
         String[] parts = input.split(" ", 2);
-        final String SUPPORTED_COMMANDS = "- list\n- mark\n- unmark\n- todo\n- deadline\n- event\n- bye";
+        final String SUPPORTED_COMMANDS = "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- bye";
         switch (parts[0]) {
             case "list":
                 if (parts.length == 1) {
@@ -61,6 +61,13 @@ public class Parser {
                 } else {
                     throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description with the timeline after your command. " +
                             "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                }
+                break;
+            case "find":
+                if (parts.length == 2) {
+                    ui.displayFind(taskList.findTasks(parts[1]));
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example" + " (e.g. \"find book\")");
                 }
                 break;
             default:
