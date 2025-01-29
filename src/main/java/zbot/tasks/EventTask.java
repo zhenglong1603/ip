@@ -8,10 +8,8 @@ import java.time.format.DateTimeFormatter;
  * Extends the {@link Task} class.
  */
 public class EventTask extends Task {
-
     DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-
     LocalDate fromDate;
     LocalDate toDate;
 

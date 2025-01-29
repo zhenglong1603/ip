@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * To test the commands input and their expected outputs.
  */
 public class TaskCommandTest {
-
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     private final TaskList tasks = new TaskList();
 
@@ -74,8 +73,6 @@ public class TaskCommandTest {
                 "[T][ ] test",
                 "---------------------------------------------------"
         );
-
-        // Assert
         assertEquals(expected.trim(), outputStreamCaptor.toString().trim());
     }
 }

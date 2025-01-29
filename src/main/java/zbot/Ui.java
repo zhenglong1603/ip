@@ -3,18 +3,22 @@ package zbot;
 import zbot.tasks.Task;
 import zbot.tasks.TaskList;
 
+import java.util.List;
+
 /**
- * Represents a class that generates responses for the bot.
- *
- * The `Ui` class is responsible for interacting with the user by displaying messages,
- * responses, and other output to the console. It provides methods to show feedback to
- * the user, such as task-related messages, error messages, and general information about
- * the application's status.
- *
- * This class helps to separate the user interface logic from other components like task management
- * and data storage, enabling a clear structure for handling user interactions.
+ * Represents the user interface of ZBOT, responsible for interacting with the user.
+ * <p>
+ * The {@code Ui} class provides methods to display messages, task lists, and errors
+ * in a structured manner, ensuring a clear separation between the user interface
+ * and the logic handling tasks.
  */
 class Ui {
+
+    /**
+     * Generates a response based on the given input command.
+     *
+     * @param input The command string to determine the response.
+     */
     public void generateResponse(String input) {
         switch(input) {
         case "start":
@@ -37,13 +41,9 @@ class Ui {
     }
 
     /**
-     * Displays the list of tasks in the task list to the user.
+     * Displays all the tasks currently stored in the given {@code TaskList}.
      *
-     * This method iterates through all the tasks in the given `TaskList` and prints
-     * each task with its respective index number in the console. It includes a header
-     * and footer to make the output more readable.
-     *
-     * @param taskList the TaskList object containing the tasks to be displayed
+     * @param taskList The {@code TaskList} object containing tasks to be displayed.
      */
     public void showContents(TaskList taskList) {
         System.out.println("---------------------------------------------------");
@@ -56,4 +56,19 @@ class Ui {
         System.out.println("---------------------------------------------------");
     }
 
+    /**
+     * Displays tasks that match a given search keyword.
+     *
+     * @param taskList A list of {@code Task} objects that match the search query.
+     */
+    public void displayFind(List<Task> taskList) {
+        System.out.println("---------------------------------------------------");
+        System.out.println("Here are the tasks that matches the keyword:");
+        int index = 1;
+        for (Task task : taskList) {
+            System.out.println(index + ". " + task.toString());
+            index++;
+        }
+        System.out.println("---------------------------------------------------");
+    }
 }

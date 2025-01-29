@@ -35,9 +35,10 @@ class StorageManager {
         this.filePath = filePath;
     }
 
+
     /**
      * Loads the existing task list from filePath
-     *
+     * <p>
      * This method reads the task data from a file, parses it, and creates a list of tasks based on the file's contents.
      * The file format is assumed to have tasks represented by a type identifier and task details, with each task on a new line.
      * If a task is marked as done (indicated by a "1" in the file), it is marked as completed when created.
@@ -88,13 +89,13 @@ class StorageManager {
 
     /**
      * Saves the task list to a file.
-     *
+     * <p>
      * This method saves all tasks in the given task list to a file. Each task is serialized in a specific format:
      * - "T" for ToDoTask
      * - "D" for DeadlineTask
      * - "E" for EventTask
      * The file will include the task's done status (1 for done, 0 for not done), description, and for specific task types, additional details such as deadline or event dates.
-     *
+     * <p>
      * If the directory where the file is to be stored does not exist, it will be created.
      *
      * @param taskList the task list containing tasks to be saved

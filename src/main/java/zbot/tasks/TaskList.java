@@ -134,6 +134,20 @@ public class TaskList {
     }
 
     /**
+     * Returns the taskList which matches the keyword
+     *
+     * @return list of task withmatching keyword
+     */
+    public List<Task> findTasks(String word) {
+        List<Task> ans = new ArrayList<>();
+        for (Task curr : this.taskList) {
+            if (curr.getDescription().contains(word)) {
+                ans.add(curr);
+            }
+        }
+        return ans;
+    }
+    /**
      * Returns the size of the task list.
      *
      * @return The number of tasks in the list.

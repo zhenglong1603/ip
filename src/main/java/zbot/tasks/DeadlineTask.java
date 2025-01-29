@@ -22,7 +22,6 @@ public class DeadlineTask extends Task {
     public DeadlineTask(String description, String deadline) {
         super(description);
         this.deadline = LocalDate.parse(deadline, inputFormatter);
-
     }
 
     /**
