@@ -1,3 +1,7 @@
+package zbot;
+import zbot.exceptions.*;
+import zbot.tasks.TaskList;
+
 public class Parser {
     public static void parseInput(String input, Ui ui, TaskList taskList) throws IncorrectInputException, InvalidTaskException, EmptyTaskListException, InvalidTaskNumberException {
         String[] parts = input.split(" ", 2);

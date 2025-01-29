@@ -1,4 +1,6 @@
-public class ToDoTask extends Task{
+package zbot.tasks;
+
+public class ToDoTask extends Task {
     public ToDoTask(String description) {
         super(description);
     }
