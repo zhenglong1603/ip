@@ -32,8 +32,7 @@ application {
 }
 
 shadowJar {
-    archiveBaseName = "ZBOT"
-    archiveClassifier = null
+    archiveFileName = 'zbot.jar'
 }
 
 run {
