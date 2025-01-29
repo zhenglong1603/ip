@@ -4,6 +4,9 @@ import java.util.Scanner;
 import java.io.IOException;
 import zbot.tasks.*;
 
+/**
+ * Main class of the program
+ */
 public class ZBOT {
     private final StorageManager storage;
     private TaskList taskList;
@@ -21,6 +24,17 @@ public class ZBOT {
         }
     }
 
+    /**
+     * Starts and runs the bot, continuously accepting user input and processing commands.
+     *
+     * This method initializes the bot, displays the starting response, and enters a loop to
+     * read user input until the user types "bye". For each input, it tries to parse and execute
+     * the command using the {@link Parser}. If an exception occurs during parsing (e.g.,
+     * invalid command or empty task list), an error message is displayed. The method ensures
+     * that the task list is saved to a file before the program ends and then displays an ending response.
+     *
+     * @throws IOException if an error occurs while saving the task list to a file.
+     */
     public void run() {
         ui.generateResponse("start");
         Scanner scanner = new Scanner(System.in);
@@ -35,7 +49,7 @@ public class ZBOT {
             } else {
                 try {
                     Parser.parseInput(input,ui,taskList);
-                } catch (InvalidTaskException | IncorrectInputException | EmptyTaskListException |
+                } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException |
                          InvalidTaskNumberException e) {
                     System.out.println("---------------------------------------------------");
                     System.out.println(e.getMessage());

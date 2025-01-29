@@ -9,11 +9,34 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.List;
 
+/**
+ * Represents a class that acts as storage for persisting and managing information.
+ * <p>
+ * This class is responsible for:
+ * <ul>
+ *   <li>Storing data, such as tasks</li>
+ *   <li>Retrieving stored data for further processing</li>
+ * </ul>
+ * The storage class ensures that data is properly stored and can be accessed when needed
+ * by other components of the application.
+ */
 public class StorageManager {
     String filePath;
     public StorageManager(String filePath) {
         this.filePath = filePath;
     }
+
+    /**
+     * Loads the existing task list from filePath
+     *
+     * This method reads the task data from a file, parses it, and creates a list of tasks based on the file's contents.
+     * The file format is assumed to have tasks represented by a type identifier and task details, with each task on a new line.
+     * If a task is marked as done (indicated by a "1" in the file), it is marked as completed when created.
+     *
+     * @return a list of tasks loaded from the file
+     * @throws ZBOTFileNotFoundException if the file cannot be found
+     * @throws IOException if the file format is invalid or there is an error reading the file
+     */
     public List<Task> loadExistingFile() throws ZBOTFileNotFoundException, IOException {
         List<Task> ans = new ArrayList<>();
         try {
@@ -54,6 +77,20 @@ public class StorageManager {
         return ans;
     }
 
+    /**
+     * Saves the task list to a file.
+     *
+     * This method saves all tasks in the given task list to a file. Each task is serialized in a specific format:
+     * - "T" for ToDoTask
+     * - "D" for DeadlineTask
+     * - "E" for EventTask
+     * The file will include the task's done status (1 for done, 0 for not done), description, and for specific task types, additional details such as deadline or event dates.
+     *
+     * If the directory where the file is to be stored does not exist, it will be created.
+     *
+     * @param taskList the task list containing tasks to be saved
+     * @throws IOException if an error occurs while creating directories or writing to the file
+     */
     public void saveToFile(TaskList taskList) throws IOException {
         File file = new File(filePath);
         File parentDir = file.getParentFile();

@@ -1,7 +1,5 @@
 package zbot;
-
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import zbot.tasks.*;
 import java.io.ByteArrayOutputStream;
@@ -10,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * To test the commands input and their expected outputs.
+ */
 public class TaskCommandTest {
 
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
@@ -21,6 +22,12 @@ public class TaskCommandTest {
         tasks.clearTasks();
     }
 
+    /**
+     * Tests the expected output for marking a task as done.
+     *
+     * This method verifies that the system correctly outputs
+     * the expected message when a task is marked as completed.
+     */
     @Test
     public void markTaskSuccess() {
         Task t = new ToDoTask("test");
