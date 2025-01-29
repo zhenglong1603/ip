@@ -1,7 +1,7 @@
 package zbot.exceptions;
 
 public class InvalidTaskException extends Exception {
-    public InvalidTaskException(String message) {
+    public InvalidTaskException (String message) {
         super(message);
     }
 }

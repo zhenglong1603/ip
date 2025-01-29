@@ -1,26 +1,27 @@
 package zbot;
+
 import zbot.tasks.Task;
 import zbot.tasks.TaskList;
 
 public class Ui {
     public void generateResponse(String input) {
         switch(input) {
-            case "start":
+        case "start":
                 System.out.println("---------------------------------------------------");
                 System.out.println("Hello! I'm ZBOT!!");
                 System.out.println("What can I do for you?");
                 System.out.println("---------------------------------------------------");
                 break;
-            case "end":
-                System.out.println("---------------------------------------------------");
-                System.out.println("Bye. Hope to see you again soon :)");
-                System.out.println("---------------------------------------------------");
-                break;
-            case "loadingError":
-                System.out.println("---------------------------------------------------");
-                System.out.println("There was an issue loading the list");
-                System.out.println("---------------------------------------------------");
-                break;
+        case "end":
+            System.out.println("---------------------------------------------------");
+            System.out.println("Bye. Hope to see you again soon :)");
+            System.out.println("---------------------------------------------------");
+            break;
+        case "loadingError":
+            System.out.println("---------------------------------------------------");
+            System.out.println("There was an issue loading the list");
+            System.out.println("---------------------------------------------------");
+            break;
         }
     }
 

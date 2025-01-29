@@ -1,12 +1,21 @@
 package zbot;
-import zbot.exceptions.*;
-import zbot.tasks.*;
+
+import zbot.exceptions.ZBOTFileNotFoundException;
+
+import zbot.tasks.ToDoTask;
+import zbot.tasks.EventTask;
+import zbot.tasks.DeadlineTask;
+import zbot.tasks.Task;
+import zbot.tasks.TaskList;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
+
 import java.util.Scanner;
+import java.io.IOException;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class StorageManager {
@@ -23,29 +32,29 @@ public class StorageManager {
                 String curr = s.nextLine();
                 String[] parts = curr.split(" \\| ");
                 switch (parts[0]) {
-                    case "T" :
-                        ToDoTask a = new ToDoTask(parts[2]);
-                        if (parts[1].equals("1")) {
-                            a.markDone();
-                        }
-                        ans.add(a);
-                        break;
-                    case "D":
-                        DeadlineTask b = new DeadlineTask(parts[2], parts[3]);
-                        if (parts[1].equals("1")) {
-                            b.markDone();
-                        }
-                        ans.add(b);
-                        break;
-                    case "E" :
-                        EventTask c = new EventTask(parts[2], parts[3], parts[4]);
-                        if (parts[1].equals("1")) {
-                            c.markDone();
-                        }
-                        ans.add(c);
-                        break;
-                    default :
-                        throw new IOException("File format is invalid");
+                case "T" :
+                    ToDoTask a = new ToDoTask(parts[2]);
+                    if (parts[1].equals("1")) {
+                        a.markDone();
+                    }
+                    ans.add(a);
+                    break;
+                case "D":
+                    DeadlineTask b = new DeadlineTask(parts[2], parts[3]);
+                    if (parts[1].equals("1")) {
+                        b.markDone();
+                    }
+                    ans.add(b);
+                    break;
+                case "E" :
+                    EventTask c = new EventTask(parts[2], parts[3], parts[4]);
+                    if (parts[1].equals("1")) {
+                        c.markDone();
+                    }
+                    ans.add(c);
+                    break;
+                default :
+                    throw new IOException("File format is invalid");
                 }
             }
         } catch (FileNotFoundException e) {
