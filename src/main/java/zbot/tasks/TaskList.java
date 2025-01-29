@@ -91,6 +91,10 @@ public class TaskList {
         System.out.println("---------------------------------------------------");
     }
 
+    public void clearTasks() {
+        this.taskList.clear();
+    }
+
     public int getSize() {
         return this.taskList.size();
     }
