@@ -1,15 +1,14 @@
 package zbot;
 
-import zbot.exceptions.ZBOTFileNotFoundException;
+import java.io.IOException;
+import java.util.Scanner;
+
+import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
 import zbot.exceptions.InvalidCommandException;
 import zbot.exceptions.InvalidTaskNumberException;
-import zbot.exceptions.EmptyTaskListException;
-
+import zbot.exceptions.ZBOTFileNotFoundException;
 import zbot.tasks.TaskList;
-
-import java.util.Scanner;
-import java.io.IOException;
 
 /**
  * Main class of the program
@@ -54,20 +53,16 @@ class ZBOT {
                 try {
                     Parser.parseInput(input,ui,taskList);
                 } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException |
-                         InvalidTaskNumberException e) {
-                    System.out.println("---------------------------------------------------");
-                    System.out.println(e.getMessage());
-                    System.out.println("---------------------------------------------------");
+                         InvalidTaskNumberException exception) {
+                    ui.printResponse(exception.getMessage());
                 }
             }
         }
 
         try {
             storage.saveToFile(taskList);
-        } catch (IOException e) {
-            System.out.println("-----------------------");
-            System.out.println(e.getMessage());
-            System.out.println("-----------------------");
+        } catch (IOException exception) {
+            ui.printResponse(exception.getMessage());
         }
 
         ui.generateResponse("end");

@@ -1,9 +1,10 @@
 package zbot.tasks;
 
 import java.time.format.DateTimeParseException;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import zbot.Ui;
 
 /**
  * Represents a list of tasks with functionality to manage and manipulate them.
@@ -21,10 +22,10 @@ public class TaskList {
     /**
      * Constructs a {@code TaskList} with an existing list of tasks.
      *
-     * @param exisitingTaskList The existing list of tasks.
+     * @param existingTaskList The existing list of tasks.
      */
-    public TaskList(List<Task> exisitingTaskList) {
-        this.taskList = exisitingTaskList;
+    public TaskList(List<Task> existingTaskList) {
+        this.taskList = existingTaskList;
     }
 
     /**
@@ -35,16 +36,12 @@ public class TaskList {
      * @param description The description of the task, including additional information
      *                    like date for event or deadline tasks.
      */
-    public void addContent(String type, String description) {
+    public void addContent(String type, String description, Ui ui) {
         switch(type) {
         case "todo":
             Task newToDoTask = new ToDoTask(description);
             taskList.add(newToDoTask);
-            System.out.println("---------------------------------------------------");
-            System.out.println("Got it. I've added this task:");
-            System.out.println(newToDoTask);
-            System.out.printf("Now you have %d tasks in the list.%n", taskList.size());
-            System.out.println("---------------------------------------------------");
+            ui.printTaskResponse(newToDoTask, taskList.size());
             break;
         case "event":
             Task newEventTask = null;
@@ -55,30 +52,22 @@ public class TaskList {
             } catch (DateTimeParseException e) {
                 System.out.println("Sorry!! Please use yyyy-MM-dd as the proper date format");
             } finally {
-                if(newEventTask != null) {
-                    System.out.println("---------------------------------------------------");
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(newEventTask);
-                    System.out.printf("Now you have %d tasks in the list.%n", taskList.size());
-                    System.out.println("---------------------------------------------------");
+                if (newEventTask != null) {
+                    ui.printTaskResponse(newEventTask, taskList.size());
                 }
             }
             break;
         case "deadline":
             Task newDeadlineTask = null;
             try {
-                String[] parts = description.split("/by ");
-                newDeadlineTask = new DeadlineTask(parts[0], parts[1]);
+                String[] deadlineParts = description.split(" /");
+                newDeadlineTask = new DeadlineTask(deadlineParts[0], deadlineParts[1].substring(3));
                 taskList.add(newDeadlineTask);
             } catch (DateTimeParseException e) {
                 System.out.println("Sorry!! Please use yyyy-MM-dd as the proper date format");
             } finally {
-                if(newDeadlineTask != null) {
-                    System.out.println("---------------------------------------------------");
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(newDeadlineTask);
-                    System.out.printf("Now you have %d tasks in the list.%n", taskList.size());
-                    System.out.println("---------------------------------------------------");
+                if (newDeadlineTask != null) {
+                    ui.printTaskResponse(newDeadlineTask, taskList.size());
                 }
             }
             break;
@@ -90,14 +79,14 @@ public class TaskList {
      *
      * @param index The index of the task to remove.
      */
-    public void deleteContent(int index) {
+    public void deleteContent(int index, Ui ui) {
         Task deletedTask = taskList.get(index);
         taskList.remove(index);
-        System.out.println("---------------------------------------------------");
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(deletedTask.toString());
-        System.out.printf("Now you have %d tasks in the list.%n", taskList.size());
-        System.out.println("---------------------------------------------------");
+        int size = taskList.size();
+        String message1 = "Noted. I've removed this task:";
+        String message2 = deletedTask.toString();
+        String message3 = String.format("Now you have %d tasks in the list.%n", size);
+        ui.printResponse(message1, message2, message3);
     }
 
     /**
@@ -105,12 +94,11 @@ public class TaskList {
      *
      * @param index The index of the task to mark as done.
      */
-    public void markTask(int index) {
+    public void markTask(int index, Ui ui) {
         taskList.get(index).markDone();
-        System.out.println("---------------------------------------------------");
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println(taskList.get(index).toString());
-        System.out.println("---------------------------------------------------");
+        String message1 = "Nice! I've marked this task as done:";
+        String message2 = taskList.get(index).toString();
+        ui.printResponse(message1, message2);
     }
 
     /**
@@ -118,12 +106,11 @@ public class TaskList {
      *
      * @param index The index of the task to mark as undone.
      */
-    public void unmarkTask(int index) {
+    public void unmarkTask(int index, Ui ui) {
         taskList.get(index).markUndone();
-        System.out.println("---------------------------------------------------");
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println(taskList.get(index).toString());
-        System.out.println("---------------------------------------------------");
+        String message1 = "OK, I've marked this task as not done yet:";
+        String message2 = taskList.get(index).toString();
+        ui.printResponse(message1, message2);
     }
 
     /**
@@ -136,7 +123,7 @@ public class TaskList {
     /**
      * Returns the taskList which matches the keyword
      *
-     * @return list of task withmatching keyword
+     * @return list of task with matching keyword
      */
     public List<Task> findTasks(String word) {
         List<Task> ans = new ArrayList<>();
@@ -147,6 +134,7 @@ public class TaskList {
         }
         return ans;
     }
+
     /**
      * Returns the size of the task list.
      *
@@ -159,9 +147,9 @@ public class TaskList {
     /**
      * Returns the list of tasks.
      *
-     * @return The list of tasks in the task list.
+     * @return A copy of the list of tasks in the task list.
      */
     public List<Task> getTaskList() {
-        return this.taskList;
+        return new ArrayList<>(this.taskList);
     }
 }

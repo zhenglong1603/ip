@@ -1,10 +1,9 @@
 package zbot;
 
+import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
 import zbot.exceptions.InvalidCommandException;
 import zbot.exceptions.InvalidTaskNumberException;
-import zbot.exceptions.EmptyTaskListException;
-
 import zbot.tasks.TaskList;
 
 /**
@@ -21,11 +20,8 @@ import zbot.tasks.TaskList;
  */
 class Parser {
     /**
-     * Parses the input and executes the corresponding logic.
-     * <p>
      * This method processes the user's input and triggers the appropriate actions based on the command.
      * It interacts with the UI and task list to carry out the task.
-     * </p>
      *
      * @param input the input string entered by the user, containing the command and related arguments
      * @param ui the UI object used to display messages and interact with the user
@@ -51,26 +47,26 @@ class Parser {
             if (parts.length != 2) {
                 throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"delete 1\"");
             }
-            int deleteIndex = getIndex(parts,taskList);
-            taskList.deleteContent(deleteIndex);
+            int deleteIndex = getIndex(parts, taskList);
+            taskList.deleteContent(deleteIndex, ui);
             break;
         case "mark":
             if (parts.length != 2) {
                 throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"mark 1\"");
             }
             int markIndex = getIndex(parts, taskList);
-            taskList.markTask(markIndex);
+            taskList.markTask(markIndex, ui);
             break;
         case "unmark":
             if (parts.length != 2) {
                 throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"unmark 1\"");
             }
             int unmarkIndex = getIndex(parts, taskList);
-            taskList.unmarkTask(unmarkIndex);
+            taskList.unmarkTask(unmarkIndex, ui);
             break;
         case "todo":
             if (parts.length == 2) {
-                taskList.addContent(parts[0], parts[1]);
+                taskList.addContent(parts[0], parts[1], ui);
             } else {
                 throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description after your command. " +
                         "(e.g. \"todo read a book\")");
@@ -78,15 +74,25 @@ class Parser {
             break;
         case "deadline":
             if (parts.length == 2) {
-                taskList.addContent(parts[0], parts[1]);
+                if (parts[1].contains("/by")) {
+                    taskList.addContent(parts[0], parts[1], ui);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your deadline command has the deadline specified after /by. " +
+                            "(e.g. \"deadline description /by \"deadline_date\" \")");
+                }
             } else {
                 throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description and deadline after your command. " +
-                        "(e.g. \"deadline description /by \"deadline\" \")");
+                        "(e.g. \"deadline description /by \"deadline_date\" \")");
             }
             break;
         case "event":
             if (parts.length == 2) {
-                taskList.addContent(parts[0], parts[1]);
+                if (parts[1].contains("/from") && parts[1].contains("/to")) {
+                    taskList.addContent(parts[0], parts[1], ui);
+                } else {
+                    throw new IncorrectInputException("Sorry!! Please ensure your event command has both a start time (/from) and an end time (/to). " +
+                            "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                }
             } else {
                 throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description with the timeline after your command. " +
                         "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
@@ -100,7 +106,7 @@ class Parser {
             }
             break;
         default:
-            throw new InvalidCommandException("Sorry!!  I didn't recognise that request. These are the " +
+            throw new InvalidCommandException("Sorry!! I didn't recognise that request. These are the " +
                     "following supported commands:\n" + SUPPORTED_COMMANDS);
         }
     }
@@ -125,9 +131,9 @@ class Parser {
      *                                     number of tasks in the task list.
      */
     public static int getIndex(String[] parts, TaskList taskList) throws IncorrectInputException, EmptyTaskListException, InvalidTaskNumberException {
-        int markIndex;
+        int taskIndex;
         try {
-            markIndex = Integer.parseInt(parts[1]) - 1;
+            taskIndex = Integer.parseInt(parts[1]) - 1;
         } catch (NumberFormatException e) {
             throw new IncorrectInputException("Sorry!! The task number must be a valid integer (e.g., \"mark 1\").");
         }
@@ -136,9 +142,9 @@ class Parser {
             throw new EmptyTaskListException("Sorry!! The current task list is empty. Please add some tasks first.");
         }
 
-        if (markIndex < 0 || markIndex >= taskList.getSize()) {
+        if (taskIndex < 0 || taskIndex >= taskList.getSize()) {
             throw new InvalidTaskNumberException("Sorry!! The task number is invalid. Please check the task number again.");
         }
-        return markIndex;
+        return taskIndex;
     }
 }
