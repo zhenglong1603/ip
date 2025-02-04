@@ -54,8 +54,6 @@ public class EventTask extends Task {
         return this.fromDate.format(outputFormatter);
     }
 
-
-
     /**
      * Returns the end date of the event formatted as a string in the format "MMM dd yyyy".
      *
@@ -64,7 +62,6 @@ public class EventTask extends Task {
     public String toDateString() {
         return this.toDate.format(outputFormatter);
     }
-
 
     /**
      * Returns a string representation of the {@code EventTask}.
