@@ -7,7 +7,7 @@ package zbot.exceptions;
  * task number
  */
 public class InvalidTaskNumberException extends Exception {
-    public InvalidTaskNumberException (String message) {
+    public InvalidTaskNumberException(String message) {
         super(message);
     }
 }

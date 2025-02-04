@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import zbot.exceptions.ZBOTFileNotFoundException;
+import zbot.exceptions.ZbotFileNotFoundException;
 import zbot.tasks.DeadlineTask;
 import zbot.tasks.EventTask;
 import zbot.tasks.Task;
@@ -26,7 +26,7 @@ import zbot.tasks.ToDoTask;
  * by other components of the application.
  */
 class StorageManager {
-    String filePath;
+    private final String filePath;
     public StorageManager(String filePath) {
         this.filePath = filePath;
     }
@@ -36,19 +36,20 @@ class StorageManager {
      * Loads the existing task list from filePath
      * <p>
      * This method reads the task data from a file, parses it, and creates a list of tasks based on the file's contents.
-     * The file format is assumed to have tasks represented by a type identifier and task details, with each task on a new line.
+     * The file format is assumed to have tasks represented by a type identifier
+     * and task details, with each task on a new line.
      * If a task is marked as done (indicated by a "1" in the file), it is marked as completed when created.
      *
      * @return a list of tasks loaded from the file
-     * @throws ZBOTFileNotFoundException if the file cannot be found
+     * @throws ZbotFileNotFoundException if the file cannot be found
      * @throws IOException if the file format is invalid or there is an error reading the file
      */
-    public List<Task> loadExistingFile() throws ZBOTFileNotFoundException, IOException {
+    public List<Task> loadExistingFile() throws ZbotFileNotFoundException, IOException {
         List<Task> ans = new ArrayList<>();
         File file = new File(filePath);
 
         if (!file.exists()) {
-            throw new ZBOTFileNotFoundException("The data could not be found");
+            throw new ZbotFileNotFoundException("The data could not be found");
         }
 
         try (Scanner scanner = new Scanner(file)) {
@@ -78,22 +79,32 @@ class StorageManager {
      * @throws IOException if the format for the task is invalid
      */
     private static Task getTask(String[] parts) throws IOException {
-        Task task = switch (parts[0]) {
-            case "T" -> new ToDoTask(parts[2]);
-            case "D" -> {
-                if (parts.length < 4) throw new IOException("Invalid deadline format");
-                yield new DeadlineTask(parts[2], parts[3]);
+        Task task;
+
+        switch (parts[0]) {
+        case "T":
+            task = new ToDoTask(parts[2]);
+            break;
+        case "D":
+            if (parts.length < 4) {
+                throw new IOException("Invalid deadline format");
             }
-            case "E" -> {
-                if (parts.length < 5) throw new IOException("Invalid event format");
-                yield new EventTask(parts[2], parts[3], parts[4]);
+            task = new DeadlineTask(parts[2], parts[3]);
+            break;
+        case "E":
+            if (parts.length < 5) {
+                throw new IOException("Invalid event format");
             }
-            default -> throw new IOException("File format is invalid");
-        };
+            task = new EventTask(parts[2], parts[3], parts[4]);
+            break;
+        default:
+            throw new IOException("File format is invalid");
+        }
 
         if (parts[1].equals("1")) {
             task.markDone();
         }
+
         return task;
     }
 
@@ -120,7 +131,7 @@ class StorageManager {
                         + parentDir.getAbsolutePath());
             }
         }
-        try (FileWriter fileWriter = new FileWriter(filePath)){
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
             StringBuilder s = new StringBuilder();
             for (Task task : taskList.getTaskList()) {
                 s.append(formatTask(task)).append("\n");

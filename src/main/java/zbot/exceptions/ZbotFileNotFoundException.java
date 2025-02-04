@@ -6,8 +6,9 @@ package zbot.exceptions;
  * the ZBOT file.
  * The exception message may provide further details on the cause of failure.
  */
-public class ZBOTFileNotFoundException extends Exception {
-    public ZBOTFileNotFoundException (String message) {
+public class ZbotFileNotFoundException extends Exception {
+    public ZbotFileNotFoundException(String message) {
         super(message);
     }
 }
+
