@@ -10,7 +10,7 @@ import zbot.Ui;
  * Represents a list of tasks with functionality to manage and manipulate them.
  */
 public class TaskList {
-    List<Task> taskList;
+    private List<Task> taskList;
 
     /**
      * Constructs an empty {@code TaskList}.
@@ -70,6 +70,9 @@ public class TaskList {
                     ui.printTaskResponse(newDeadlineTask, taskList.size());
                 }
             }
+            break;
+        default:
+            System.out.println("Sorry!! I didn't recognise that task type. Please use 'todo', 'event', or 'deadline'.");
             break;
         }
     }

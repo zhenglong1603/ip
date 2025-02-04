@@ -8,9 +8,9 @@ import java.time.format.DateTimeFormatter;
  * Extends the {@link Task} class.
  */
 public class DeadlineTask extends Task {
-    LocalDate deadline;
-    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private LocalDate deadline;
 
     /**
      * Constructs a {@code DeadlineTask} with the specified description and deadline.
@@ -50,6 +50,6 @@ public class DeadlineTask extends Task {
      */
     @Override
     public String toString() {
-        return "[D]" + super.toString() + "(by: " + deadlineString() + ")";
+        return "[D]" + super.toString() + " (by: " + deadlineString() + ")";
     }
 }

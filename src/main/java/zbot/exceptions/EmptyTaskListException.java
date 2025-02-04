@@ -6,7 +6,7 @@ package zbot.exceptions;
  * operation cannot be completed.
  */
 public class EmptyTaskListException extends Exception {
-    public EmptyTaskListException (String message) {
+    public EmptyTaskListException(String message) {
         super(message);
     }
 }

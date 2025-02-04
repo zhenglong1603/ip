@@ -8,10 +8,10 @@ import java.time.format.DateTimeFormatter;
  * Extends the {@link Task} class.
  */
 public class EventTask extends Task {
-    DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
-    LocalDate fromDate;
-    LocalDate toDate;
+    private final DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private final DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private LocalDate fromDate;
+    private LocalDate toDate;
 
     /**
      * Constructs an {@code EventTask} with the specified description, start date, and end date.
@@ -71,6 +71,6 @@ public class EventTask extends Task {
      */
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + fromDateString() + " to: " +  toDateString() + ")";
+        return "[E]" + super.toString() + " (from: " + fromDateString() + " to: " + toDateString() + ")";
     }
 }

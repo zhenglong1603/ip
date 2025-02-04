@@ -7,23 +7,23 @@ import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
 import zbot.exceptions.InvalidCommandException;
 import zbot.exceptions.InvalidTaskNumberException;
-import zbot.exceptions.ZBOTFileNotFoundException;
+import zbot.exceptions.ZbotFileNotFoundException;
 import zbot.tasks.TaskList;
 
 /**
  * Main class of the program
  */
-class ZBOT {
+class Zbot {
     private final StorageManager storage;
     private TaskList taskList;
     private final Ui ui;
 
-    public ZBOT(String filePath) {
+    public Zbot(String filePath) {
         this.storage = new StorageManager(filePath);
         this.ui = new Ui();
         try {
             this.taskList = new TaskList(storage.loadExistingFile());
-        }  catch (ZBOTFileNotFoundException | IOException e){
+        } catch (ZbotFileNotFoundException | IOException e) {
             ui.generateResponse("loadingError");
             this.taskList = new TaskList();
         }
@@ -51,9 +51,9 @@ class ZBOT {
                 isRunning = false;
             } else {
                 try {
-                    Parser.parseInput(input,ui,taskList);
-                } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException |
-                         InvalidTaskNumberException exception) {
+                    Parser.parseInput(input, ui, taskList);
+                } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException
+                         | InvalidTaskNumberException exception) {
                     ui.printResponse(exception.getMessage());
                 }
             }
@@ -69,7 +69,7 @@ class ZBOT {
     }
 
     public static void main(String[] args) {
-        new ZBOT("./data/ZBOT.txt").run();
+        new Zbot("./data/Zbot.txt").run();
     }
 }
 

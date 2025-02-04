@@ -7,7 +7,7 @@ package zbot.exceptions;
  * necessary for executing a command.
  */
 public class IncorrectInputException extends Exception {
-    public IncorrectInputException (String message) {
+    public IncorrectInputException(String message) {
         super(message);
     }
 }

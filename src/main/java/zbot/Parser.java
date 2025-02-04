@@ -29,37 +29,45 @@ class Parser {
      * @throws IncorrectInputException if the input does not follow the correct format
      * @throws InvalidCommandException if the command entered by the user does not exist or is not recognized
      * @throws EmptyTaskListException if the task list is empty and a task operation is attempted
-     * @throws InvalidTaskNumberException if the task number is less than 0 or greater than or equal to the size of the task list
+     * @throws InvalidTaskNumberException if the task number is less than 0 or greater
+     *      than or equal to the size of the task list
      */
-    public static void parseInput(String input, Ui ui, TaskList taskList) throws IncorrectInputException, InvalidCommandException, EmptyTaskListException, InvalidTaskNumberException {
+    public static void parseInput(String input, Ui ui, TaskList taskList)
+            throws IncorrectInputException, InvalidCommandException,
+            EmptyTaskListException, InvalidTaskNumberException {
         String[] parts = input.split(" ", 2);
-        final String SUPPORTED_COMMANDS = "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- bye";
+        final String supportedCommands =
+                "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- bye";
         switch (parts[0]) {
         case "list":
             if (parts.length == 1) {
                 ui.showContents(taskList);
             } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and have nothing else. " +
-                        "(e.g. \"list\")");
+                throw new IncorrectInputException(
+                        "Sorry!! Please ensure your command matches the following example and have nothing else. "
+                                + "(e.g. \"list\")");
             }
             break;
         case "delete":
             if (parts.length != 2) {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"delete 1\"");
+                throw new IncorrectInputException(
+                        "Sorry!! Please ensure your command matches the example: \"delete 1\"");
             }
             int deleteIndex = getIndex(parts, taskList);
             taskList.deleteContent(deleteIndex, ui);
             break;
         case "mark":
             if (parts.length != 2) {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"mark 1\"");
+                throw new IncorrectInputException(
+                        "Sorry!! Please ensure your command matches the example: \"mark 1\"");
             }
             int markIndex = getIndex(parts, taskList);
             taskList.markTask(markIndex, ui);
             break;
         case "unmark":
             if (parts.length != 2) {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the example: \"unmark 1\"");
+                throw new IncorrectInputException(
+                        "Sorry!! Please ensure your command matches the example: \"unmark 1\"");
             }
             int unmarkIndex = getIndex(parts, taskList);
             taskList.unmarkTask(unmarkIndex, ui);
@@ -68,8 +76,10 @@ class Parser {
             if (parts.length == 2) {
                 taskList.addContent(parts[0], parts[1], ui);
             } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description after your command. " +
-                        "(e.g. \"todo read a book\")");
+                throw new IncorrectInputException(
+                        "Sorry!! Please ensure your command matches the following example and "
+                                + "has a description after your command. "
+                                + "(e.g. \"todo read a book\")");
             }
             break;
         case "deadline":
@@ -77,12 +87,14 @@ class Parser {
                 if (parts[1].contains("/by")) {
                     taskList.addContent(parts[0], parts[1], ui);
                 } else {
-                    throw new IncorrectInputException("Sorry!! Please ensure your deadline command has the deadline specified after /by. " +
-                            "(e.g. \"deadline description /by \"deadline_date\" \")");
+                    throw new IncorrectInputException("Sorry!! Please ensure your deadline command has "
+                            + "the deadline specified after /by. "
+                            + "(e.g. \"deadline description /by \"deadline_date\" \")");
                 }
             } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description and deadline after your command. " +
-                        "(e.g. \"deadline description /by \"deadline_date\" \")");
+                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example"
+                        + "and has a description and deadline after your command. "
+                        + "(e.g. \"deadline description /by \"deadline_date\" \")");
             }
             break;
         case "event":
@@ -90,24 +102,27 @@ class Parser {
                 if (parts[1].contains("/from") && parts[1].contains("/to")) {
                     taskList.addContent(parts[0], parts[1], ui);
                 } else {
-                    throw new IncorrectInputException("Sorry!! Please ensure your event command has both a start time (/from) and an end time (/to). " +
-                            "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                    throw new IncorrectInputException("Sorry!! Please ensure your event command "
+                            + "has both a start time (/from) and an end time (/to). "
+                            + "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
                 }
             } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example and has a description with the timeline after your command. " +
-                        "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                throw new IncorrectInputException("Sorry!! Please ensure your command matches "
+                        + "the following example and has a description with the timeline after your command. "
+                        + "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
             }
             break;
         case "find":
             if (parts.length == 2) {
                 ui.displayFind(taskList.findTasks(parts[1]));
             } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example" + " (e.g. \"find book\")");
+                throw new IncorrectInputException("Sorry!! Please ensure your command"
+                        + "matches the following example" + " (e.g. \"find book\")");
             }
             break;
         default:
-            throw new InvalidCommandException("Sorry!! I didn't recognise that request. These are the " +
-                    "following supported commands:\n" + SUPPORTED_COMMANDS);
+            throw new InvalidCommandException("Sorry!! I didn't recognise that request. These are the "
+                    + "following supported commands:\n" + supportedCommands);
         }
     }
 
@@ -130,20 +145,24 @@ class Parser {
      * @throws InvalidTaskNumberException if the task number is less than 1 or greater than or equal to the
      *                                     number of tasks in the task list.
      */
-    public static int getIndex(String[] parts, TaskList taskList) throws IncorrectInputException, EmptyTaskListException, InvalidTaskNumberException {
+    public static int getIndex(String[] parts, TaskList taskList) throws
+            IncorrectInputException, EmptyTaskListException, InvalidTaskNumberException {
         int taskIndex;
         try {
             taskIndex = Integer.parseInt(parts[1]) - 1;
         } catch (NumberFormatException e) {
-            throw new IncorrectInputException("Sorry!! The task number must be a valid integer (e.g., \"mark 1\").");
+            throw new IncorrectInputException(
+                    "Sorry!! The task number must be a valid integer (e.g., \"mark 1\").");
         }
 
         if (taskList.getSize() == 0) {
-            throw new EmptyTaskListException("Sorry!! The current task list is empty. Please add some tasks first.");
+            throw new EmptyTaskListException(
+                    "Sorry!! The current task list is empty. Please add some tasks first.");
         }
 
         if (taskIndex < 0 || taskIndex >= taskList.getSize()) {
-            throw new InvalidTaskNumberException("Sorry!! The task number is invalid. Please check the task number again.");
+            throw new InvalidTaskNumberException(
+                    "Sorry!! The task number is invalid. Please check the task number again.");
         }
         return taskIndex;
     }

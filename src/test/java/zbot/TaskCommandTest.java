@@ -94,15 +94,15 @@ public class TaskCommandTest {
         Exception thrownException = null;
         try {
             Parser.parseInput("hi", ui, tasks);
-        } catch (IncorrectInputException | InvalidCommandException | EmptyTaskListException |
-                 InvalidTaskNumberException e) {
-                thrownException = e;
+        } catch (IncorrectInputException | InvalidCommandException | EmptyTaskListException
+                 | InvalidTaskNumberException e) {
+            thrownException = e;
         }
 
         assertNotNull(thrownException, "Expected IncorrectInputException to be thrown.");
-        assertEquals("Sorry!! I didn't recognise that request. These are the " +
-                        "following supported commands:\n" +
-                        "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- bye",
+        assertEquals("Sorry!! I didn't recognise that request. These are the "
+                        + "following supported commands:\n"
+                        + "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- bye",
                 thrownException.getMessage());
     }
 
@@ -112,14 +112,16 @@ public class TaskCommandTest {
         Exception thrownException = null;
         try {
             Parser.parseInput("todo", ui, tasks);
-        } catch (IncorrectInputException | InvalidCommandException | EmptyTaskListException |
-                 InvalidTaskNumberException e) {
+        } catch (IncorrectInputException | InvalidCommandException | EmptyTaskListException
+                 | InvalidTaskNumberException e) {
             thrownException = e;
         }
 
         assertNotNull(thrownException, "Expected IncorrectInputException to be thrown.");
-        assertEquals("Sorry!! Please ensure your command matches the following example and has a description after your command. " +
-        "(e.g. \"todo read a book\")",
+        assertEquals(
+                "Sorry!! Please ensure your command matches the following example "
+                        + "and has a description after your command. "
+                        + "(e.g. \"todo read a book\")",
                 thrownException.getMessage());
     }
 }

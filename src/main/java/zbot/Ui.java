@@ -30,6 +30,9 @@ public class Ui {
         case "loadingError":
             printResponse("There was an issue loading the list");
             break;
+        default:
+            printResponse("I'm not sure how to respond to that. Please try a valid command.");
+            break;
         }
     }
 
@@ -100,7 +103,7 @@ public class Ui {
         printLine();
         System.out.println(response1);
         System.out.println(response2);
-        System.out.println(response3);
+        System.out.printf(response3);
         printLine();
     }
 
