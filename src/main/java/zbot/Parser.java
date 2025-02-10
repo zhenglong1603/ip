@@ -1,9 +1,13 @@
 package zbot;
 
+import java.io.IOException;
+import java.util.List;
+
 import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
 import zbot.exceptions.InvalidCommandException;
 import zbot.exceptions.InvalidTaskNumberException;
+import zbot.tasks.Task;
 import zbot.tasks.TaskList;
 
 /**
@@ -24,24 +28,30 @@ class Parser {
      * It interacts with the UI and task list to carry out the task.
      *
      * @param input the input string entered by the user, containing the command and related arguments
-     * @param ui the UI object used to display messages and interact with the user
      * @param taskList the list of tasks to be managed and modified based on the input
+     * @param storage the UI object used to display messages and interact with the user
      * @throws IncorrectInputException if the input does not follow the correct format
      * @throws InvalidCommandException if the command entered by the user does not exist or is not recognized
      * @throws EmptyTaskListException if the task list is empty and a task operation is attempted
      * @throws InvalidTaskNumberException if the task number is less than 0 or greater
      *      than or equal to the size of the task list
      */
-    public static void parseInput(String input, Ui ui, TaskList taskList)
+    public static String parseInput(String input, TaskList taskList, StorageManager storage)
             throws IncorrectInputException, InvalidCommandException,
             EmptyTaskListException, InvalidTaskNumberException {
+        StringBuilder output = new StringBuilder();
         String[] parts = input.split(" ", 2);
         final String supportedCommands =
-                "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- bye";
+                "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- save";
         switch (parts[0]) {
         case "list":
             if (parts.length == 1) {
-                ui.showContents(taskList);
+                output.append("Here are the tasks in your list:\n");
+                int index = 1;
+                for (Task t : taskList.getTaskList()) {
+                    output.append(index).append(".").append(t.toString()).append("\n");
+                    index++;
+                }
             } else {
                 throw new IncorrectInputException(
                         "Sorry!! Please ensure your command matches the following example and have nothing else. "
@@ -54,7 +64,9 @@ class Parser {
                         "Sorry!! Please ensure your command matches the example: \"delete 1\"");
             }
             int deleteIndex = getIndex(parts, taskList);
-            taskList.deleteContent(deleteIndex, ui);
+            output.append("OK, I've removed this task from the list:\n");
+            output.append(taskList.deleteContent(deleteIndex)).append("\n");
+            output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
             break;
         case "mark":
             if (parts.length != 2) {
@@ -62,7 +74,8 @@ class Parser {
                         "Sorry!! Please ensure your command matches the example: \"mark 1\"");
             }
             int markIndex = getIndex(parts, taskList);
-            taskList.markTask(markIndex, ui);
+            output.append("Nice! I've marked this task as done:\n");
+            output.append(taskList.markTask(markIndex)).append("\n");
             break;
         case "unmark":
             if (parts.length != 2) {
@@ -70,11 +83,21 @@ class Parser {
                         "Sorry!! Please ensure your command matches the example: \"unmark 1\"");
             }
             int unmarkIndex = getIndex(parts, taskList);
-            taskList.unmarkTask(unmarkIndex, ui);
+            output.append("OK, I've marked this task as not done yet:\n");
+            output.append(taskList.unmarkTask(unmarkIndex)).append("\n");
             break;
         case "todo":
             if (parts.length == 2) {
-                taskList.addContent(parts[0], parts[1], ui);
+                String result = taskList.addContent(parts[0], parts[1]);
+
+                if (result.startsWith("Sorry!!")) {
+                    output.append(result).append("\n");
+                } else {
+                    output.append("Got it. I've added this task:\n");
+                    output.append(result).append("\n");
+                    output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
+                }
+
             } else {
                 throw new IncorrectInputException(
                         "Sorry!! Please ensure your command matches the following example and "
@@ -85,7 +108,14 @@ class Parser {
         case "deadline":
             if (parts.length == 2) {
                 if (parts[1].contains("/by")) {
-                    taskList.addContent(parts[0], parts[1], ui);
+                    String result = taskList.addContent(parts[0], parts[1]);
+                    if (result.startsWith("Sorry!!")) {
+                        output.append(result).append("\n");
+                    } else {
+                        output.append("Got it. I've added this task:\n");
+                        output.append(result).append("\n");
+                        output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
+                    }
                 } else {
                     throw new IncorrectInputException("Sorry!! Please ensure your deadline command has "
                             + "the deadline specified after /by. "
@@ -100,7 +130,14 @@ class Parser {
         case "event":
             if (parts.length == 2) {
                 if (parts[1].contains("/from") && parts[1].contains("/to")) {
-                    taskList.addContent(parts[0], parts[1], ui);
+                    String result = taskList.addContent(parts[0], parts[1]);
+                    if (result.startsWith("Sorry!!")) {
+                        output.append(result).append("\n");
+                    } else {
+                        output.append("Got it. I've added this task:\n");
+                        output.append(result).append("\n");
+                        output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
+                    }
                 } else {
                     throw new IncorrectInputException("Sorry!! Please ensure your event command "
                             + "has both a start time (/from) and an end time (/to). "
@@ -114,16 +151,31 @@ class Parser {
             break;
         case "find":
             if (parts.length == 2) {
-                ui.displayFind(taskList.findTasks(parts[1]));
+                List<Task> tasks = taskList.findTasks(parts[1]);
+                int index = 1;
+                output.append("Here are the matching tasks in your list:\n");
+                for (Task t : tasks) {
+                    output.append(index).append(".").append(t.toString()).append("\n");
+                    index++;
+                }
             } else {
                 throw new IncorrectInputException("Sorry!! Please ensure your command"
                         + "matches the following example" + " (e.g. \"find book\")");
+            }
+            break;
+        case "save":
+            try {
+                storage.saveToFile(taskList);
+                output.append("successfully saved!");
+            } catch (IOException e) {
+                output.append(e.getMessage()).append("\n");
             }
             break;
         default:
             throw new InvalidCommandException("Sorry!! I didn't recognise that request. These are the "
                     + "following supported commands:\n" + supportedCommands);
         }
+        return output.toString();
     }
 
     /**

@@ -4,8 +4,6 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-import zbot.Ui;
-
 /**
  * Represents a list of tasks with functionality to manage and manipulate them.
  */
@@ -36,44 +34,34 @@ public class TaskList {
      * @param description The description of the task, including additional information
      *                    like date for event or deadline tasks.
      */
-    public void addContent(String type, String description, Ui ui) {
+    public String addContent(String type, String description) {
         switch(type) {
         case "todo":
             Task newToDoTask = new ToDoTask(description);
             taskList.add(newToDoTask);
-            ui.printTaskResponse(newToDoTask, taskList.size());
-            break;
+            return newToDoTask.toString();
         case "event":
-            Task newEventTask = null;
+            Task newEventTask;
             try {
                 String[] eventParts = description.split(" /");
                 newEventTask = new EventTask(eventParts[0], eventParts[1].substring(5), eventParts[2].substring(3));
                 taskList.add(newEventTask);
+                return newEventTask.toString();
             } catch (DateTimeParseException e) {
-                System.out.println("Sorry!! Please use yyyy-MM-dd as the proper date format");
-            } finally {
-                if (newEventTask != null) {
-                    ui.printTaskResponse(newEventTask, taskList.size());
-                }
+                return "Sorry!! Please use yyyy-MM-dd as the proper date format and provide both start and end times.";
             }
-            break;
         case "deadline":
-            Task newDeadlineTask = null;
+            Task newDeadlineTask;
             try {
                 String[] deadlineParts = description.split(" /");
                 newDeadlineTask = new DeadlineTask(deadlineParts[0], deadlineParts[1].substring(3));
                 taskList.add(newDeadlineTask);
+                return newDeadlineTask.toString();
             } catch (DateTimeParseException e) {
-                System.out.println("Sorry!! Please use yyyy-MM-dd as the proper date format");
-            } finally {
-                if (newDeadlineTask != null) {
-                    ui.printTaskResponse(newDeadlineTask, taskList.size());
-                }
+                return "Sorry!! Please use yyyy-MM-dd as the proper date format and provide both start and end times.";
             }
-            break;
         default:
-            System.out.println("Sorry!! I didn't recognise that task type. Please use 'todo', 'event', or 'deadline'.");
-            break;
+            return "Sorry!! I didn't recognise that task type. Please use 'todo', 'event', or 'deadline'.";
         }
     }
 
@@ -82,14 +70,10 @@ public class TaskList {
      *
      * @param index The index of the task to remove.
      */
-    public void deleteContent(int index, Ui ui) {
+    public String deleteContent(int index) {
         Task deletedTask = taskList.get(index);
         taskList.remove(index);
-        int size = taskList.size();
-        String message1 = "Noted. I've removed this task:";
-        String message2 = deletedTask.toString();
-        String message3 = String.format("Now you have %d tasks in the list.%n", size);
-        ui.printResponse(message1, message2, message3);
+        return deletedTask.toString();
     }
 
     /**
@@ -97,11 +81,9 @@ public class TaskList {
      *
      * @param index The index of the task to mark as done.
      */
-    public void markTask(int index, Ui ui) {
+    public String markTask(int index) {
         taskList.get(index).markDone();
-        String message1 = "Nice! I've marked this task as done:";
-        String message2 = taskList.get(index).toString();
-        ui.printResponse(message1, message2);
+        return taskList.get(index).toString();
     }
 
     /**
@@ -109,11 +91,9 @@ public class TaskList {
      *
      * @param index The index of the task to mark as undone.
      */
-    public void unmarkTask(int index, Ui ui) {
+    public String unmarkTask(int index) {
         taskList.get(index).markUndone();
-        String message1 = "OK, I've marked this task as not done yet:";
-        String message2 = taskList.get(index).toString();
-        ui.printResponse(message1, message2);
+        return taskList.get(index).toString();
     }
 
     /**
