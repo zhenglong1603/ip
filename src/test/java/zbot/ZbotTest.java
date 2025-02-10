@@ -1,20 +1,20 @@
-package zbot;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import org.junit.jupiter.api.Test;
-
-/**
- * A dummy test
- */
-public class ZbotTest {
-    @Test
-    public void dummyTest() {
-        assertEquals(2, 2);
-    }
-
-    @Test
-    public void anotherDummyTest() {
-        assertEquals(4, 4);
-    }
-}
+//package zbot;
+//
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//
+//import org.junit.jupiter.api.Test;
+//
+///**
+// * A dummy test
+// */
+//public class ZbotTest {
+//    @Test
+//    public void dummyTest() {
+//        assertEquals(2, 2);
+//    }
+//
+//    @Test
+//    public void anotherDummyTest() {
+//        assertEquals(4, 4);
+//    }
+//}
