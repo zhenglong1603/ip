@@ -27,12 +27,16 @@ public class TaskList {
     }
 
     /**
-     * Adds a new task to the list based on the task type.
-     * Depending on the type, either a ToDoTask, EventTask, or DeadlineTask is added.
+     * Adds a new task to the task list based on the specified task type.
+     * Depending on the type, a ToDoTask, EventTask, or DeadlineTask is created and added.
      *
      * @param type The type of task to add (e.g., "todo", "event", "deadline").
-     * @param description The description of the task, including additional information
-     *                    like date for event or deadline tasks.
+     * @param description The description of the task. For event and deadline tasks,
+     *                    this should include additional information such as the date/time
+     *                    in the format: "description /by yyyy-MM-dd" for deadlines
+     *                    or "description /from yyyy-MM-dd /to yyyy-MM-dd" for events.
+     * @return A string representation of the newly added task or an error message
+     *         if the input format is incorrect.
      */
     public String addContent(String type, String description) {
         switch(type) {
@@ -66,9 +70,11 @@ public class TaskList {
     }
 
     /**
-     * Deletes a task from the list based on the index.
+     * Deletes a task from the task list based on the specified index.
      *
-     * @param index The index of the task to remove.
+     * @param index The index of the task to remove (0-based index).
+     * @return A string representation of the deleted task.
+     * @throws IndexOutOfBoundsException If the index is invalid or out of range.
      */
     public String deleteContent(int index) {
         Task deletedTask = taskList.get(index);
@@ -77,9 +83,11 @@ public class TaskList {
     }
 
     /**
-     * Marks a task as done based on the index.
+     * Marks a task as done based on the specified index.
      *
-     * @param index The index of the task to mark as done.
+     * @param index The index of the task to mark as done (0-based index).
+     * @return A string representation of the updated task after marking it as done.
+     * @throws IndexOutOfBoundsException If the index is invalid or out of range.
      */
     public String markTask(int index) {
         taskList.get(index).markDone();
@@ -87,20 +95,15 @@ public class TaskList {
     }
 
     /**
-     * Marks a task as undone based on the index.
+     * Marks a task as undone based on the specified index.
      *
-     * @param index The index of the task to mark as undone.
+     * @param index The index of the task to mark as undone (0-based index).
+     * @return A string representation of the updated task after marking it as undone.
+     * @throws IndexOutOfBoundsException If the index is invalid or out of range.
      */
     public String unmarkTask(int index) {
         taskList.get(index).markUndone();
         return taskList.get(index).toString();
-    }
-
-    /**
-     * Clears all tasks from the list.
-     */
-    public void clearTasks() {
-        this.taskList.clear();
     }
 
     /**

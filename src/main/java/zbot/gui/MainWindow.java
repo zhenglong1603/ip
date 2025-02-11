@@ -1,7 +1,6 @@
 package zbot.gui;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -19,9 +18,6 @@ public class MainWindow extends AnchorPane {
     private VBox dialogContainer;
     @FXML
     private TextField userInput;
-    @FXML
-    private Button sendButton;
-
     private Zbot zbot;
 
     private Image userImage = new
@@ -34,7 +30,7 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Duke instance */
+    /** Injects the Zbot instance */
     public void setZbot(Zbot zbot) {
         this.zbot = zbot;
     }
@@ -49,7 +45,7 @@ public class MainWindow extends AnchorPane {
         String response = zbot.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getZbotDialog(response, dukeImage)
         );
         userInput.clear();
     }
