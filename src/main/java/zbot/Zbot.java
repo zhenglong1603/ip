@@ -20,6 +20,7 @@ public class Zbot {
      * Zbot initialize
      */
     public Zbot(String filePath) {
+        assert !filePath.isEmpty() : "filepath should not be empty";
         this.storage = new StorageManager(filePath);
 
         try {

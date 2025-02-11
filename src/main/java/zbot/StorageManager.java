@@ -123,6 +123,7 @@ class StorageManager {
      * @throws IOException if an error occurs while creating directories or writing to the file
      */
     public void saveToFile(TaskList taskList) throws IOException {
+        assert taskList != null : "taskList cannot be null";
         File file = new File(filePath);
         File parentDir = file.getParentFile();
         if (parentDir != null && !parentDir.exists()) {
