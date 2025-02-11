@@ -25,12 +25,11 @@ import zbot.tasks.ToDoTask;
  * The storage class ensures that data is properly stored and can be accessed when needed
  * by other components of the application.
  */
-class StorageManager {
+public class StorageManager {
     private final String filePath;
     public StorageManager(String filePath) {
         this.filePath = filePath;
     }
-
 
     /**
      * Loads the existing task list from filePath

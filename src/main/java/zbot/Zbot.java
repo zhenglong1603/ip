@@ -17,12 +17,13 @@ public class Zbot {
     private TaskList taskList;
 
     /**
-     * Zbot initialize
+     * Initializes a new instance of Zbot.
+     *
+     * @param filePath The file path to load existing tasks from storage.
      */
     public Zbot(String filePath) {
         assert !filePath.isEmpty() : "filepath should not be empty";
         this.storage = new StorageManager(filePath);
-
         try {
             this.taskList = new TaskList(storage.loadExistingFile());
         } catch (ZbotFileNotFoundException | IOException e) {
@@ -45,6 +46,8 @@ public class Zbot {
         } catch (InvalidCommandException | IncorrectInputException | EmptyTaskListException
                  | InvalidTaskNumberException exception) {
             return exception.getMessage();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

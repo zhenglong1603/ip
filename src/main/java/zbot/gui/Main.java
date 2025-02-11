@@ -10,12 +10,19 @@ import javafx.stage.Stage;
 import zbot.Zbot;
 
 /**
- * A GUI for Duke using FXML.
+ * The entry point for the Zbot GUI application using JavaFX.
+ * This class initializes and launches the JavaFX application.
  */
 public class Main extends Application {
 
     private Zbot zbot = new Zbot("./data/Zbot.txt");
 
+    /**
+     * Starts the JavaFX application by loading the FXML layout
+     * and setting up the main window.
+     *
+     * @param stage The primary stage for the application.
+     */
     @Override
     public void start(Stage stage) {
         try {

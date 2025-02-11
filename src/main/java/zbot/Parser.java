@@ -1,13 +1,19 @@
 package zbot;
 
-import java.io.IOException;
-import java.util.List;
-
+import zbot.commands.Command;
+import zbot.commands.DeadlineCommand;
+import zbot.commands.DeleteCommand;
+import zbot.commands.EventCommand;
+import zbot.commands.FindCommand;
+import zbot.commands.ListCommand;
+import zbot.commands.MarkCommand;
+import zbot.commands.SaveCommand;
+import zbot.commands.ToDoCommand;
+import zbot.commands.UnmarkCommand;
 import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
 import zbot.exceptions.InvalidCommandException;
 import zbot.exceptions.InvalidTaskNumberException;
-import zbot.tasks.Task;
 import zbot.tasks.TaskList;
 
 /**
@@ -23,159 +29,107 @@ import zbot.tasks.TaskList;
  * task management, file handling, or displaying results.
  */
 class Parser {
+
     /**
-     * This method processes the user's input and triggers the appropriate actions based on the command.
-     * It interacts with the UI and task list to carry out the task.
+     * Parses the user input and executes the corresponding command.
      *
-     * @param input the input string entered by the user, containing the command and related arguments
-     * @param taskList the list of tasks to be managed and modified based on the input
-     * @param storage the UI object used to display messages and interact with the user
-     * @throws IncorrectInputException if the input does not follow the correct format
-     * @throws InvalidCommandException if the command entered by the user does not exist or is not recognized
-     * @throws EmptyTaskListException if the task list is empty and a task operation is attempted
-     * @throws InvalidTaskNumberException if the task number is less than 0 or greater
-     *      than or equal to the size of the task list
+     * @param input The raw input string from the user.
+     * @param taskList The task list that stores tasks.
+     * @param storage The storage manager responsible for saving and loading tasks.
+     * @return The result of executing the command.
+     * @throws Exception If an error occurs while processing the command.
      */
-    public static String parseInput(String input, TaskList taskList, StorageManager storage)
-            throws IncorrectInputException, InvalidCommandException,
-            EmptyTaskListException, InvalidTaskNumberException {
-        StringBuilder output = new StringBuilder();
-        String[] parts = input.split(" ", 2);
-        final String supportedCommands =
+    public static String parseInput(String input, TaskList taskList, StorageManager storage) throws Exception {
+        Command command = CommandFactory.getCommand(input, taskList);
+        return command.execute(taskList, storage);
+    }
+
+    /**
+     * A factory class that parses user input and returns the appropriate command object.
+     */
+    public class CommandFactory {
+
+        /**
+         * Parses the user input and returns the corresponding command object.
+         *
+         * @param input The raw input string from the user.
+         * @param taskList The task list that stores tasks.
+         * @return A Command object corresponding to the user's input.
+         * @throws Exception If the input is invalid or the command is not recognized.
+         */
+        public static Command getCommand(String input, TaskList taskList) throws Exception {
+            String[] parts = input.split(" ", 2);
+            final String supportedCommands =
                 "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- save";
-        switch (parts[0]) {
-        case "list":
-            if (parts.length == 1) {
-                output.append("Here are the tasks in your list:\n");
-                int index = 1;
-                for (Task t : taskList.getTaskList()) {
-                    output.append(index).append(".").append(t.toString()).append("\n");
-                    index++;
+            switch (parts[0]) {
+            case "list":
+                return new ListCommand();
+            case "delete":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command"
+                                    + "matches the following example"
+                                    + " (e.g. \"delete 1\")");
                 }
-            } else {
-                throw new IncorrectInputException(
-                        "Sorry!! Please ensure your command matches the following example and have nothing else. "
-                                + "(e.g. \"list\")");
-            }
-            break;
-        case "delete":
-            if (parts.length != 2) {
-                throw new IncorrectInputException(
-                        "Sorry!! Please ensure your command matches the example: \"delete 1\"");
-            }
-            int deleteIndex = getIndex(parts, taskList);
-            output.append("OK, I've removed this task from the list:\n");
-            output.append(taskList.deleteContent(deleteIndex)).append("\n");
-            output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
-            break;
-        case "mark":
-            if (parts.length != 2) {
-                throw new IncorrectInputException(
-                        "Sorry!! Please ensure your command matches the example: \"mark 1\"");
-            }
-            int markIndex = getIndex(parts, taskList);
-            output.append("Nice! I've marked this task as done:\n");
-            output.append(taskList.markTask(markIndex)).append("\n");
-            break;
-        case "unmark":
-            if (parts.length != 2) {
-                throw new IncorrectInputException(
-                        "Sorry!! Please ensure your command matches the example: \"unmark 1\"");
-            }
-            int unmarkIndex = getIndex(parts, taskList);
-            output.append("OK, I've marked this task as not done yet:\n");
-            output.append(taskList.unmarkTask(unmarkIndex)).append("\n");
-            break;
-        case "todo":
-            if (parts.length == 2) {
-                String result = taskList.addContent(parts[0], parts[1]);
-
-                if (result.startsWith("Sorry!!")) {
-                    output.append(result).append("\n");
-                } else {
-                    output.append("Got it. I've added this task:\n");
-                    output.append(result).append("\n");
-                    output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
+                int deleteIndex = getIndex(parts, taskList);
+                return new DeleteCommand(deleteIndex);
+            case "mark":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command"
+                                    + "matches the following example"
+                                    + " (e.g. \"mark 1\")");
                 }
-
-            } else {
-                throw new IncorrectInputException(
-                        "Sorry!! Please ensure your command matches the following example and "
-                                + "has a description after your command. "
-                                + "(e.g. \"todo read a book\")");
-            }
-            break;
-        case "deadline":
-            if (parts.length == 2) {
-                if (parts[1].contains("/by")) {
-                    String result = taskList.addContent(parts[0], parts[1]);
-                    if (result.startsWith("Sorry!!")) {
-                        output.append(result).append("\n");
-                    } else {
-                        output.append("Got it. I've added this task:\n");
-                        output.append(result).append("\n");
-                        output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
-                    }
-                } else {
-                    throw new IncorrectInputException("Sorry!! Please ensure your deadline command has "
-                            + "the deadline specified after /by. "
+                int markIndex = getIndex(parts, taskList);
+                return new MarkCommand(markIndex);
+            case "unmark":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command"
+                                    + "matches the following example"
+                                    + " (e.g. \"unmark 1\")");
+                }
+                int unmarkIndex = getIndex(parts, taskList);
+                return new UnmarkCommand(unmarkIndex);
+            case "find":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command"
+                                    + "matches the following example"
+                                    + " (e.g. \"find book\")");
+                }
+                return new FindCommand(parts[1]);
+            case "todo":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command matches the following example and "
+                                    + "has a description after your command. "
+                                    + "(e.g. \"todo read a book\")");
+                }
+                return new ToDoCommand(parts[1]);
+            case "deadline":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command matches the following example"
+                            + "and has a description and deadline after your command. "
                             + "(e.g. \"deadline description /by \"deadline_date\" \")");
                 }
-            } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches the following example"
-                        + "and has a description and deadline after your command. "
-                        + "(e.g. \"deadline description /by \"deadline_date\" \")");
-            }
-            break;
-        case "event":
-            if (parts.length == 2) {
-                if (parts[1].contains("/from") && parts[1].contains("/to")) {
-                    String result = taskList.addContent(parts[0], parts[1]);
-                    if (result.startsWith("Sorry!!")) {
-                        output.append(result).append("\n");
-                    } else {
-                        output.append("Got it. I've added this task:\n");
-                        output.append(result).append("\n");
-                        output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
-                    }
-                } else {
-                    throw new IncorrectInputException("Sorry!! Please ensure your event command "
-                            + "has both a start time (/from) and an end time (/to). "
-                            + "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                return new DeadlineCommand(parts[1]);
+            case "event":
+                if (parts.length != 2) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please provide a description along with the timeline. "
+                            + "Example: \"event description /from start_time /to end_time\"");
                 }
-            } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command matches "
-                        + "the following example and has a description with the timeline after your command. "
-                        + "(e.g. \"event description /from \"start_time\" /to \"end_time\" \")");
+                return new EventCommand(parts[1]);
+            case "save":
+                return new SaveCommand();
+            default:
+                throw new InvalidCommandException(
+                        "Sorry!! I didn't recognise that request. "
+                                + "These are the following supported commands:\n" + supportedCommands);
             }
-            break;
-        case "find":
-            if (parts.length == 2) {
-                List<Task> tasks = taskList.findTasks(parts[1]);
-                int index = 1;
-                output.append("Here are the matching tasks in your list:\n");
-                for (Task t : tasks) {
-                    output.append(index).append(".").append(t.toString()).append("\n");
-                    index++;
-                }
-            } else {
-                throw new IncorrectInputException("Sorry!! Please ensure your command"
-                        + "matches the following example" + " (e.g. \"find book\")");
-            }
-            break;
-        case "save":
-            try {
-                storage.saveToFile(taskList);
-                output.append("successfully saved!");
-            } catch (IOException e) {
-                output.append(e.getMessage()).append("\n");
-            }
-            break;
-        default:
-            throw new InvalidCommandException("Sorry!! I didn't recognise that request. These are the "
-                    + "following supported commands:\n" + supportedCommands);
         }
-        return output.toString();
     }
 
     /**
