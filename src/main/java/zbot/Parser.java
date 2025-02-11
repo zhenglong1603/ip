@@ -9,6 +9,7 @@ import zbot.commands.ListCommand;
 import zbot.commands.MarkCommand;
 import zbot.commands.SaveCommand;
 import zbot.commands.ToDoCommand;
+import zbot.commands.UndoCommand;
 import zbot.commands.UnmarkCommand;
 import zbot.exceptions.EmptyTaskListException;
 import zbot.exceptions.IncorrectInputException;
@@ -60,7 +61,7 @@ class Parser {
         public static Command getCommand(String input, TaskList taskList) throws Exception {
             String[] parts = input.split(" ", 2);
             final String supportedCommands =
-                "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- save";
+                "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- save\n- undo";
             switch (parts[0]) {
             case "list":
                 return new ListCommand();
@@ -124,6 +125,8 @@ class Parser {
                 return new EventCommand(parts[1]);
             case "save":
                 return new SaveCommand();
+            case "undo":
+                return new UndoCommand();
             default:
                 throw new InvalidCommandException(
                         "Sorry!! I didn't recognise that request. "
