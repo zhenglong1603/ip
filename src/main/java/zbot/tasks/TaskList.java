@@ -3,18 +3,21 @@ package zbot.tasks;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * Represents a list of tasks with functionality to manage and manipulate them.
  */
 public class TaskList {
     private List<Task> taskList;
+    private Stack<ArrayList<Task>> undoHistory;
 
     /**
      * Constructs an empty {@code TaskList}.
      */
     public TaskList() {
         this.taskList = new ArrayList<>();
+        this.undoHistory = new Stack<>();
     }
 
     /**
@@ -25,6 +28,7 @@ public class TaskList {
     public TaskList(List<Task> existingTaskList) {
         assert taskList != null : "taskList should not be null";
         this.taskList = existingTaskList;
+        this.undoHistory = new Stack<>();
     }
 
     /**
@@ -43,6 +47,7 @@ public class TaskList {
         switch(type) {
         case "todo":
             Task newToDoTask = new ToDoTask(description);
+            saveStateForUndo();
             taskList.add(newToDoTask);
             return newToDoTask.toString();
         case "event":
@@ -50,6 +55,7 @@ public class TaskList {
             try {
                 String[] eventParts = description.split(" /");
                 newEventTask = new EventTask(eventParts[0], eventParts[1].substring(5), eventParts[2].substring(3));
+                saveStateForUndo();
                 taskList.add(newEventTask);
                 return newEventTask.toString();
             } catch (DateTimeParseException e) {
@@ -60,6 +66,7 @@ public class TaskList {
             try {
                 String[] deadlineParts = description.split(" /");
                 newDeadlineTask = new DeadlineTask(deadlineParts[0], deadlineParts[1].substring(3));
+                saveStateForUndo();
                 taskList.add(newDeadlineTask);
                 return newDeadlineTask.toString();
             } catch (DateTimeParseException e) {
@@ -79,6 +86,7 @@ public class TaskList {
      */
     public String deleteContent(int index) {
         Task deletedTask = taskList.get(index);
+        saveStateForUndo();
         taskList.remove(index);
         return deletedTask.toString();
     }
@@ -91,6 +99,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException If the index is invalid or out of range.
      */
     public String markTask(int index) {
+        saveStateForUndo();
         taskList.get(index).markDone();
         return taskList.get(index).toString();
     }
@@ -103,6 +112,7 @@ public class TaskList {
      * @throws IndexOutOfBoundsException If the index is invalid or out of range.
      */
     public String unmarkTask(int index) {
+        saveStateForUndo();
         taskList.get(index).markUndone();
         return taskList.get(index).toString();
     }
@@ -121,6 +131,27 @@ public class TaskList {
             }
         }
         return ans;
+    }
+
+    /**
+     * Returns a boolean to indicate if previous task list was restored
+     *
+     * @return boolean indicating s of restoration of task list
+     */
+    public boolean restore() {
+        if (!undoHistory.isEmpty()) {
+            taskList = undoHistory.pop();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Saves the previous state of task list before an action
+     *
+     */
+    private void saveStateForUndo() {
+        undoHistory.push(new ArrayList<>(taskList));
     }
 
     /**
