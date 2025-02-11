@@ -22,6 +22,7 @@ public class Zbot {
      * @param filePath The file path to load existing tasks from storage.
      */
     public Zbot(String filePath) {
+        assert !filePath.isEmpty() : "filepath should not be empty";
         this.storage = new StorageManager(filePath);
         try {
             this.taskList = new TaskList(storage.loadExistingFile());

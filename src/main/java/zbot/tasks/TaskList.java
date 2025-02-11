@@ -23,6 +23,7 @@ public class TaskList {
      * @param existingTaskList The existing list of tasks.
      */
     public TaskList(List<Task> existingTaskList) {
+        assert taskList != null : "taskList should not be null";
         this.taskList = existingTaskList;
     }
 
@@ -112,6 +113,7 @@ public class TaskList {
      * @return list of task with matching keyword
      */
     public List<Task> findTasks(String word) {
+        assert word != null && !word.isBlank() : "keyword cannot be null or empty";
         List<Task> ans = new ArrayList<>();
         for (Task curr : this.taskList) {
             if (curr.getDescription().contains(word)) {
