@@ -10,7 +10,7 @@ import javafx.application.Application;
 public class Launcher {
 
     /**
-     * The main method that launches the JavaFX application.
+     * Launches the JavaFX application by invoking {@code launch(args)}.
      *
      * @param args Command-line arguments passed to the application.
      */
