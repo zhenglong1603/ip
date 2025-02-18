@@ -21,7 +21,7 @@ public class SaveCommand implements Command {
     @Override
     public String execute(TaskList taskList, StorageManager storage) throws IOException {
         storage.saveToFile(taskList);
-        return "Successfully saved!";
+        return "Saved! Just in case your memory isn't as good as mine!";
     }
 }
 

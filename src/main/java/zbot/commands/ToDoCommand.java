@@ -36,7 +36,7 @@ public class ToDoCommand implements Command {
         if (result.startsWith("Sorry!!")) {
             return result;
         }
-        return "Got it. I've added this task:\n" + result
-                + "\nNow you have " + taskList.getSize() + " tasks in the list.";
+        return "Got it! Another task added to your plate!\n" + result
+                + "\nYou have " + taskList.getSize() + " tasks in the list. Let's go!!";
     }
 }

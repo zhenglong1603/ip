@@ -31,7 +31,7 @@ public class FindCommand implements Command {
     @Override
     public String execute(TaskList taskList, StorageManager storage) {
         List<Task> tasks = taskList.findTasks(keyword);
-        StringBuilder output = new StringBuilder("Here are the matching tasks in your list:\n");
+        StringBuilder output = new StringBuilder("Detective mode activated! Here's what I found!\n");
         int index = 1;
         for (Task t : tasks) {
             output.append(index).append(". ").append(t.toString()).append("\n");
