@@ -14,9 +14,9 @@ public class UndoCommand implements Command {
         boolean isRestored;
         isRestored = taskList.restore();
         if (isRestored) {
-            return "Previous list was restored successfully.";
+            return "Rewinding time... Done!";
         } else {
-            return "Previous list was not restored successfully.";
+            return "Oops! Something seems to be not working. Have you had any new actions added yet?";
         }
     }
 }

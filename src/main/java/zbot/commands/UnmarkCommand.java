@@ -30,7 +30,7 @@ public class UnmarkCommand implements Command {
      */
     @Override
     public String execute(TaskList taskList, StorageManager storage) throws InvalidTaskNumberException {
-        return "OK, I've marked this task as not done yet:\n" + taskList.unmarkTask(taskIndex);
+        return "Alright, back on the to-do list it goes!\n" + taskList.unmarkTask(taskIndex);
     }
 }
 

@@ -29,9 +29,10 @@ public class DeleteCommand implements Command {
     @Override
     public String execute(TaskList taskList, StorageManager storage) throws Exception {
         StringBuilder output = new StringBuilder();
-        output.append("OK, I've removed this task from the list:\n");
+        output.append("Poof! Gone like it never existed!\n");
+        output.append("Task removed: ");
         output.append(taskList.deleteContent(taskIndex)).append("\n");
-        output.append("Now you have ").append(taskList.getSize()).append(" tasks in the list.\n");
+        output.append("You have ").append(taskList.getSize()).append(" tasks in the list left! Let's go!!\n");
         return output.toString();
     }
 }

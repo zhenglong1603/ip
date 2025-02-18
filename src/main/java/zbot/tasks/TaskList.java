@@ -59,7 +59,7 @@ public class TaskList {
                 taskList.add(newEventTask);
                 return newEventTask.toString();
             } catch (DateTimeParseException e) {
-                return "Sorry!! Please use yyyy-MM-dd as the proper date format and provide both start and end times.";
+                return "Sorry!! Please use yyyy-MM-dd as the proper date format!";
             }
         case "deadline":
             Task newDeadlineTask;

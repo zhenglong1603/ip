@@ -18,7 +18,7 @@ public class ListCommand implements Command {
      */
     @Override
     public String execute(TaskList taskList, StorageManager storage) {
-        StringBuilder output = new StringBuilder("Here are the tasks in your list:\n");
+        StringBuilder output = new StringBuilder("Here's your to-do list! Looking busy, I see!\n");
         int index = 1;
         for (Task t : taskList.getTaskList()) {
             output.append(index).append(".").append(t.toString()).append("\n");

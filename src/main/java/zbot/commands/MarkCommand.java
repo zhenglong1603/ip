@@ -29,7 +29,7 @@ public class MarkCommand implements Command {
      */
     @Override
     public String execute(TaskList taskList, StorageManager storage) throws InvalidTaskNumberException {
-        return "Nice! I've marked this task as done:\n" + taskList.markTask(taskIndex);
+        return "Nice! One less thing to worry about!\n" + taskList.markTask(taskIndex);
     }
 }
 
