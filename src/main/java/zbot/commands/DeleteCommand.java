@@ -32,7 +32,7 @@ public class DeleteCommand implements Command {
         output.append("Poof! Gone like it never existed!\n");
         output.append("Task removed: ");
         output.append(taskList.deleteContent(taskIndex)).append("\n");
-        output.append("You have ").append(taskList.getSize()).append(" tasks in the list left! Let's go!!\n");
+        output.append("You have ").append(taskList.getSize()).append(" tasks in the list left! Let's go!!");
         return output.toString();
     }
 }

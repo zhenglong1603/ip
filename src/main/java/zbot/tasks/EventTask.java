@@ -27,7 +27,8 @@ public class EventTask extends Task {
         this.toDate = LocalDate.parse(toDate, inputFormatter);
 
         if (this.toDate.isBefore(this.fromDate)) {
-            throw new IllegalArgumentException("Sorry!! The 'to' date cannot be earlier than the 'from' date. Maybe check again?");
+            throw new IllegalArgumentException(
+                    "Sorry!! The 'to' date cannot be earlier than the 'from' date. Maybe check again?");
         }
     }
 
