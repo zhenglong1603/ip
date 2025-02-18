@@ -21,10 +21,14 @@ public class EventTask extends Task {
      * @param fromDate The start date of the event in "yyyy-MM-dd" format.
      * @param toDate The end date of the event in "yyyy-MM-dd" format.
      */
-    public EventTask(String description, String fromDate, String toDate) {
+    public EventTask(String description, String fromDate, String toDate) throws IllegalArgumentException {
         super(description);
         this.fromDate = LocalDate.parse(fromDate, inputFormatter);
         this.toDate = LocalDate.parse(toDate, inputFormatter);
+
+        if (this.toDate.isBefore(this.fromDate)) {
+            throw new IllegalArgumentException("Sorry!! The 'to' date cannot be earlier than the 'from' date. Maybe check again?");
+        }
     }
 
     /**
