@@ -101,26 +101,24 @@ class Parser {
                 }
                 return new FindCommand(parts[1]);
             case "todo":
-                if (parts.length != 2) {
+                if (parts.length != 2 || parts[1].trim().isEmpty()) {
                     throw new IncorrectInputException(
-                            "Sorry!! Please ensure your command matches the following example and "
-                                    + "has a description after your command. "
-                                    + "(e.g. \"todo read a book\")");
+                            "Hmm.. is your format correct?\n"
+                            + "Example: \"todo read a book\"");
                 }
                 return new ToDoCommand(parts[1]);
             case "deadline":
-                if (parts.length != 2) {
+                if (parts.length != 2 || !parts[1].contains("/by ")) {
                     throw new IncorrectInputException(
-                            "Sorry!! Please ensure your command matches the following example "
-                                    + "and has a description and deadline after your command. "
-                                    + "(e.g. \"deadline description /by \"deadline_date\" \")");
+                            "Hmm.. is your format correct?\n"
+                                    + "Example: \"deadline task /by date\"");
                 }
                 return new DeadlineCommand(parts[1]);
             case "event":
-                if (parts.length != 2) {
+                if (parts.length != 2 || !parts[1].contains("/from ") || !parts[1].contains("/to ")) {
                     throw new IncorrectInputException(
-                            "Sorry!! Please provide a description along with the timeline. "
-                                    + "Example: \"event description /from start_time /to end_time\"");
+                            "Hmm.. is your format correct?\n"
+                            + "Example: \"event task /from start_time /to end_time\"");
                 }
                 return new EventCommand(parts[1]);
             case "save":

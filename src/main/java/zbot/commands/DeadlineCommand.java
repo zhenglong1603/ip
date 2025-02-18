@@ -30,11 +30,6 @@ public class DeadlineCommand implements Command {
      */
     @Override
     public String execute(TaskList taskList, StorageManager storage) throws IncorrectInputException {
-        if (!description.contains("/by")) {
-            throw new IncorrectInputException(
-                    "Hmm.. did you specify the deadline using /by?\n"
-                    + "Example: \"deadline task /by date\"");
-        }
         String result = taskList.addContent("deadline", description);
         if (result.startsWith("Sorry!!")) {
             return result;

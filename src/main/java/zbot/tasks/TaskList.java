@@ -52,25 +52,34 @@ public class TaskList {
             return newToDoTask.toString();
         case "event":
             Task newEventTask;
+            String[] eventParts = description.split("/");
+            if (eventParts[0].isEmpty()) {
+                return "Sorry!! Did you forget a description?";
+            }
             try {
-                String[] eventParts = description.split(" /");
-                newEventTask = new EventTask(eventParts[0], eventParts[1].substring(5), eventParts[2].substring(3));
+                newEventTask = new EventTask(eventParts[0].trim(), eventParts[1].trim().substring(
+                        5), eventParts[2].trim().substring(3));
                 saveStateForUndo();
                 taskList.add(newEventTask);
                 return newEventTask.toString();
             } catch (DateTimeParseException e) {
-                return "Sorry!! Please use yyyy-MM-dd as the proper date format!";
+                return "Sorry!! Please ensure that the date is valid!";
+            } catch (IllegalArgumentException e) {
+                return e.getMessage();
             }
         case "deadline":
             Task newDeadlineTask;
+            String[] deadlineParts = description.split("/");
+            if (deadlineParts[0].isEmpty()) {
+                return "Sorry!! Did you forget a description?";
+            }
             try {
-                String[] deadlineParts = description.split(" /");
-                newDeadlineTask = new DeadlineTask(deadlineParts[0], deadlineParts[1].substring(3));
+                newDeadlineTask = new DeadlineTask(deadlineParts[0].trim(), deadlineParts[1].trim().substring(3));
                 saveStateForUndo();
                 taskList.add(newDeadlineTask);
                 return newDeadlineTask.toString();
             } catch (DateTimeParseException e) {
-                return "Sorry!! Please use yyyy-MM-dd as the proper date format and provide both start and end times.";
+                return "Sorry!! Please ensure that the date is valid";
             }
         default:
             return "Sorry!! I didn't recognise that task type. Please use 'todo', 'event', or 'deadline'.";

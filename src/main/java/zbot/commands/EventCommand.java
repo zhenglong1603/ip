@@ -31,10 +31,6 @@ public class EventCommand implements Command {
      */
     @Override
     public String execute(TaskList taskList, StorageManager storage) throws IncorrectInputException {
-        if (!description.contains("/from") || !description.contains("/to")) {
-            throw new IncorrectInputException("Hmm.. did you specify both start and end times using /from and /to?\n"
-                    + "Example: \"event task /from start_time /to end_time\"");
-        }
         String result = taskList.addContent("event", description);
         if (result.startsWith("Sorry!!")) {
             return result;

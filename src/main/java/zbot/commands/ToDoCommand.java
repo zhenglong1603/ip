@@ -27,11 +27,10 @@ public class ToDoCommand implements Command {
      * @param taskList The task list where the "ToDo" task will be added.
      * @param storage  The storage manager to handle file operations (not used in this command).
      * @return A message indicating that the task has been added, along with the current task count.
-     * @throws IncorrectInputException If the input is incorrect or if the task description is invalid.
+//     * @throws IncorrectInputException If the input is incorrect or if the task description is invalid.
      */
     @Override
-    public String execute(TaskList taskList, StorageManager storage)
-            throws IncorrectInputException {
+    public String execute(TaskList taskList, StorageManager storage) throws IncorrectInputException {
         String result = taskList.addContent("todo", description);
         if (result.startsWith("Sorry!!")) {
             return result;
