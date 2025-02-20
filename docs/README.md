@@ -1,30 +1,141 @@
-# ZBOT User Guide
+# ZBot User Guide
 
-// Update the title above to match the actual product name
+![Product Screenshot](./Ui.png)
 
-// Product screenshot goes here
+**ZBot** is here to help you stay organized and efficiently manage your tasks.
+Whether you need to set deadlines, track events, or handle recurring tasks, 
+**ZBot** is ready to assist. Just give me the command, and I’ll help you create, 
+update, delete, and monitor your to-dos. Let's take control of your tasks and 
+boost your productivity!
 
-// Product intro goes here
+## Features
 
-## Adding deadlines
+### Show existing tasks: `list`
 
-// Describe the action and its outcome.
+Shows a list of all existing tasks.
 
-// Give examples of usage
+Format: `list`
 
-Example: `keyword (optional arguments)`
-
-// A description of the expected outcome goes here
-
+Example:
 ```
-expected output
+Here's your to-do list! Looking busy, I see!
+1.[T][] sumit my assignment
+2.[T][X] read a book
 ```
 
-## Feature ABC
+### Marking and Unmarking tasks: `mark`, `unmark`
 
-// Feature details
+Marks and unmarks a task in the list respectively.
 
+Format: `mark/unmark INDEX`
+- Marks or unmarks the task at the specified `INDEX`. The index refers to the index number shown in the displayed
+  task list. The index **must be a positive integer** 1,2,3... The index must also be **within** the list size.
+- The task will then be marked with [x] or [ ] when displayed depending on whether is it marked or not.
 
-## Feature XYZ
+Examples:
+- `mark 1` marks the first task in the list with a cross, displaying:
+```
+Nice! One less thing to worry about!
+1.[T][X] read a book
+```
+- `unmark 5` unmarks the 5th task in the list by removing the cross, displaying:
+```
+Alright, back on the to-do list it goes!
+1.[T][] read a book
+```
 
-// Feature details
+### Searching for tasks by keyword: `find`
+Finds tasks whose description contain the keyword
+
+Format:`find KEYWORD`
+- The search is case-sensitive. e.g`book` will not match `Book`
+
+Example:
+- `find book` returns
+```
+Detective mode activated! Here's what I found!
+1.[T][] read a book
+2.[D][] submit book review (by: Dec 02 2025)
+```
+
+### Create a ToDo task: `todo`
+Creates a Task with a description.
+- A ToDo task starts off unmarked.
+
+Format: `todo DESCRIPTION`
+
+Example: `todo bake a cake` 
+```
+Got it! Another task added to your plate!
+[T][] bake a cake
+You have 6 tasks in the list. Let's go!!
+```
+creates an unmarked ToDo task with `bake a cake` as its description.
+
+### Create an Event task: `event`
+Creates a Task with a description, a start time and an end time.
+- An Event task starts off unmarked.
+- `Event` expects a start time and an end time in the format of `yyyy-MM-dd`
+
+Format: `event DESCRIPTION /from START_TIME /to END_TIME`
+
+Example: `event attend class chalet /from 2024-12-24 /to 2024-12-25` creates
+```
+Event locked in! Let's hope it's fun!
+[E][] attend class chalete (from: Dec 24 2024 to: Dec 25 2024)
+You have 7 tasks in the list. Let's go!!
+```
+
+### Create a Deadline task: `deadline`
+Creates a Task with a description and a deadline.
+- A Deadline task starts off unmarked.
+- `DEADLINE` expects a date in the format of `yyyy-MM-dd`
+
+Format: `deadline DESCRIPTION /by DATE`
+
+Example: `deadline submit book review /by 2025-02-21` displays:
+```
+Tick-tock! I've set your deadline!
+[D][] submit book review (by: Feb 21 2025)
+You have 8 tasks in the list. Let's go!!
+```
+### Delete a task: `delete`
+Deletes a task at the specified index.
+
+Format: `delete INDEX`
+- Deletes the task at the specified `INDEX`. The index refers to the index number shown in the displayed
+  task list. The index **must be a positive integer** 1,2,3... The index must also be **within** the list size.
+
+Example: `delete 4` deletes the task at the 4th index in the list, displaying:
+```
+Poof! Gone like it never existed!
+Task removed: [D][] submit book review (by: Feb 21 2025)
+You have 7 tasks left in the list. Let's go!!
+```
+
+### Undo a command: `undo`
+Undo the previous command
+- This will restore your task list to its state before the last command was executed.
+
+Format: `undo`
+
+Example: If there were previous states, `undo` will restore task list to state before, displaying:
+```
+Rewinding time... Done!
+```
+If there was no previous states, `undo` will do nothing, displaying:
+```dtd
+Oops! Something seems to be not working. Have you had any new actions added yet?
+```
+
+### Save existing tasks: `save`
+Saves the list of tasks you currently have locally, 
+which will be loaded in the next time you start the application again.
+
+Format: `save`
+
+If done successfully, the following will be shown:
+```
+Saved! Just in case your memory isn't as good as mine!
+```
+
