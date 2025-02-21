@@ -21,9 +21,9 @@ public class MainWindow extends AnchorPane {
     private Zbot zbot;
 
     private Image userImage = new
-            Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
+            Image(this.getClass().getResourceAsStream("/images/Dog.png"));
     private Image dukeImage = new
-            Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+            Image(this.getClass().getResourceAsStream("/images/Cat.png"));
 
     @FXML
     public void initializeZbot() {
