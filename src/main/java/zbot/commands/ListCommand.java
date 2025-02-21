@@ -18,11 +18,16 @@ public class ListCommand implements Command {
      */
     @Override
     public String execute(TaskList taskList, StorageManager storage) {
-        StringBuilder output = new StringBuilder("Here's your to-do list! Looking busy, I see!\n");
-        int index = 1;
-        for (Task t : taskList.getTaskList()) {
-            output.append(index).append(".").append(t.toString()).append("\n");
-            index++;
+        StringBuilder output;
+        if (!taskList.getTaskList().isEmpty()) {
+            output = new StringBuilder("Here's your to-do list! Looking busy, I see!\n");
+            int index = 1;
+            for (Task t : taskList.getTaskList()) {
+                output.append(index).append(".").append(t.toString()).append("\n");
+                index++;
+            }
+        } else {
+            output = new StringBuilder("Your current list looks empty! Add some tasks!!\n");
         }
         return output.toString();
     }
