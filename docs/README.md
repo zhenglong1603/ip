@@ -132,7 +132,7 @@ If there was no previous states, `undo` will do nothing, displaying:
 Oops! Something seems to be not working. Have you had any new actions added yet?
 ```
 
-### Save existing tasks: `bye`
+### Save existing tasks and exits application: `bye`
 - Saves the list of tasks you currently have locally, 
 which will be loaded in the next time you start the application again.
 - Exits the application
