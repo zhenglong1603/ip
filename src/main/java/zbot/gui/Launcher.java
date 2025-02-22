@@ -10,9 +10,8 @@ import javafx.application.Application;
 public class Launcher {
 
     /**
-     * Launches the JavaFX application by invoking {@code launch(args)}.
-     *
-     * @param args Command-line arguments passed to the application.
+     * Represents a launcher for the GUI.
+     * This class is adopted from SE JavaFX tutorial:
      */
     public static void main(String[] args) {
         Application.launch(Main.class, args);

@@ -1,5 +1,6 @@
 package zbot;
 
+import zbot.commands.ByeCommand;
 import zbot.commands.Command;
 import zbot.commands.DeadlineCommand;
 import zbot.commands.DeleteCommand;
@@ -7,7 +8,6 @@ import zbot.commands.EventCommand;
 import zbot.commands.FindCommand;
 import zbot.commands.ListCommand;
 import zbot.commands.MarkCommand;
-import zbot.commands.SaveCommand;
 import zbot.commands.ToDoCommand;
 import zbot.commands.UndoCommand;
 import zbot.commands.UnmarkCommand;
@@ -61,22 +61,20 @@ class Parser {
         public static Command getCommand(String input, TaskList taskList) throws Exception {
             String[] parts = input.split(" ", 2);
             final String supportedCommands =
-                    "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- save\n- undo";
+                    "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- undo\n- bye";
             switch (parts[0]) {
             case "list":
                 if (parts.length != 1) {
                     throw new IncorrectInputException(
                             "Sorry!! Please ensure your command "
-                                    + "matches the following example "
-                                    + "(e.g. \"list\")");
+                                    + "matches the following example " + "(e.g. \"list\")");
                 }
                 return new ListCommand();
             case "delete":
                 if (parts.length != 2) {
                     throw new IncorrectInputException(
                             "Sorry!! Please ensure your command "
-                                    + "matches the following example "
-                                    + "(e.g. \"delete 1\")");
+                                    + "matches the following example " + "(e.g. \"delete 1\")");
                 }
                 int deleteIndex = getIndex(parts, taskList);
                 return new DeleteCommand(deleteIndex);
@@ -84,8 +82,7 @@ class Parser {
                 if (parts.length != 2) {
                     throw new IncorrectInputException(
                             "Sorry!! Please ensure your command "
-                                    + "matches the following example "
-                                    + "(e.g. \"mark 1\")");
+                                    + "matches the following example " + "(e.g. \"mark 1\")");
                 }
                 int markIndex = getIndex(parts, taskList);
                 return new MarkCommand(markIndex);
@@ -93,8 +90,7 @@ class Parser {
                 if (parts.length != 2) {
                     throw new IncorrectInputException(
                             "Sorry!! Please ensure your command "
-                                    + "matches the following example "
-                                    + "(e.g. \"unmark 1\")");
+                                    + "matches the following example " + "(e.g. \"unmark 1\")");
                 }
                 int unmarkIndex = getIndex(parts, taskList);
                 return new UnmarkCommand(unmarkIndex);
@@ -102,15 +98,13 @@ class Parser {
                 if (parts.length != 2) {
                     throw new IncorrectInputException(
                             "Sorry!! Please ensure your command "
-                                    + "matches the following example "
-                                    + "(e.g. \"find book\")");
+                                    + "matches the following example " + "(e.g. \"find book\")");
                 }
                 return new FindCommand(parts[1]);
             case "todo":
                 if (parts.length != 2 || parts[1].trim().isEmpty()) {
                     throw new IncorrectInputException(
-                            "Hmm.. is your format correct?\n"
-                            + "Example: \"todo read a book\"");
+                            "Hmm.. is your format correct?\n" + "Example: \"todo read a book\"");
                 }
                 return new ToDoCommand(parts[1]);
             case "deadline":
@@ -127,9 +121,19 @@ class Parser {
                             + "Example: \"event task /from start_time /to end_time\"");
                 }
                 return new EventCommand(parts[1]);
-            case "save":
-                return new SaveCommand();
+            case "bye":
+                if (parts.length != 1) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command "
+                                    + "matches the following example " + "(e.g. \"bye\")");
+                }
+                return new ByeCommand();
             case "undo":
+                if (parts.length != 1) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command "
+                                    + "matches the following example " + "(e.g. \"undo\")");
+                }
                 return new UndoCommand();
             default:
                 throw new InvalidCommandException(
