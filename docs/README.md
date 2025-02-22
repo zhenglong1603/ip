@@ -27,10 +27,12 @@ Here's your to-do list! Looking busy, I see!
 
 Marks and unmarks a task in the list respectively.
 
-Format: `mark/unmark INDEX`
-- Marks or unmarks the task at the specified `INDEX`. The index refers to the index number shown in the displayed
-  task list. The index **must be a positive integer** 1,2,3... The index must also be **within** the list size.
-- The task will then be marked with [x] or [ ] when displayed depending on whether is it marked or not.
+Format: `mark/unmark <task_index>`
+- Marks or unmarks the task at the specified `task_index`. The index refers to the index number shown in the displayed
+  task list. 
+- The index **must be a positive integer** 1,2,3...
+- The index must also be **within** the list size.
+- The task will then be marked with [x] or [ ] when displayed depending on whether is it marked or unmarked.
 
 Examples:
 - `mark 1` marks the first task in the list with a cross, displaying:
@@ -38,7 +40,7 @@ Examples:
 Nice! One less thing to worry about!
 1.[T][X] read a book
 ```
-- `unmark 5` unmarks the 5th task in the list by removing the cross, displaying:
+- `unmark 1` unmarks the first task in the list by removing the cross, displaying:
 ```
 Alright, back on the to-do list it goes!
 1.[T][] read a book
@@ -47,11 +49,11 @@ Alright, back on the to-do list it goes!
 ### Searching for tasks by keyword: `find`
 Finds tasks whose description contain the keyword
 
-Format:`find KEYWORD`
+Format:`find <keyword>`
 - The search is case-sensitive. e.g`book` will not match `Book`
 
 Example:
-- `find book` returns
+`find book` displays
 ```
 Detective mode activated! Here's what I found!
 1.[T][] read a book
@@ -62,7 +64,7 @@ Detective mode activated! Here's what I found!
 Creates a Task with a description.
 - A ToDo task starts off unmarked.
 
-Format: `todo DESCRIPTION`
+Format: `todo <description>`
 
 Example: `todo bake a cake` 
 ```
@@ -77,7 +79,7 @@ Creates a Task with a description, a start time and an end time.
 - An Event task starts off unmarked.
 - `Event` expects a start time and an end time in the format of `yyyy-MM-dd`
 
-Format: `event DESCRIPTION /from START_TIME /to END_TIME`
+Format: `event <description> /from <start_time> /to <end_time>`
 
 Example: `event attend class chalet /from 2024-12-24 /to 2024-12-25` creates
 ```
@@ -91,7 +93,7 @@ Creates a Task with a description and a deadline.
 - A Deadline task starts off unmarked.
 - `DEADLINE` expects a date in the format of `yyyy-MM-dd`
 
-Format: `deadline DESCRIPTION /by DATE`
+Format: `deadline <description> /by <date>`
 
 Example: `deadline submit book review /by 2025-02-21` displays:
 ```
@@ -102,9 +104,11 @@ You have 8 tasks in the list. Let's go!!
 ### Delete a task: `delete`
 Deletes a task at the specified index.
 
-Format: `delete INDEX`
-- Deletes the task at the specified `INDEX`. The index refers to the index number shown in the displayed
-  task list. The index **must be a positive integer** 1,2,3... The index must also be **within** the list size.
+Format: `delete <task_index>`
+- Deletes the task at the specified `task_index`. The index refers to the index number shown in the displayed
+  task list. 
+- The index **must be a positive integer** 1,2,3... 
+- The index must also be **within** the list size.
 
 Example: `delete 4` deletes the task at the 4th index in the list, displaying:
 ```
@@ -129,8 +133,9 @@ Oops! Something seems to be not working. Have you had any new actions added yet?
 ```
 
 ### Save existing tasks: `save`
-Saves the list of tasks you currently have locally, 
+- Saves the list of tasks you currently have locally, 
 which will be loaded in the next time you start the application again.
+- Closing the window will not save the file.
 
 Format: `save`
 
@@ -138,4 +143,9 @@ If done successfully, the following will be shown:
 ```
 Saved! Just in case your memory isn't as good as mine!
 ```
-
+### Installation
+1. Ensure you have Java `17` or above installed on your computer.
+2. Download the latest `.jar` file from [here](https://github.com/zhenglong1603/ip/releases/tag/A-Release).
+3. Copy the file to the folder you want to use as the home folder for your Zbot chatbot.
+4. Open a command terminal, `cd` into the folder you put the `.jar` file in, and use the following command to run the application:
+   `java -jar zbot.jar`

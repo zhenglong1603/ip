@@ -64,6 +64,12 @@ class Parser {
                     "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- save\n- undo";
             switch (parts[0]) {
             case "list":
+                if (parts.length != 1) {
+                    throw new IncorrectInputException(
+                            "Sorry!! Please ensure your command "
+                                    + "matches the following example "
+                                    + "(e.g. \"list\")");
+                }
                 return new ListCommand();
             case "delete":
                 if (parts.length != 2) {

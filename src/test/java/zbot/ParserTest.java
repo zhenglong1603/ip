@@ -107,7 +107,8 @@ class ParserTest {
     @Test
     void testFindCommandNoResults() throws Exception {
         String input = "find homework";
-        String expectedOutput = "Detective mode activated! Here's what I found!\n";
+        String expectedOutput = "Detective mode activated!\n"
+                + "Sorry!! But I couldn't find anything matching your search. Try again!";
         String actualResponse = Parser.parseInput(input, taskList, null);
         assertEquals(expectedOutput, actualResponse);
     }
