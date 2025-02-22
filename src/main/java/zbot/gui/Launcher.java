@@ -11,7 +11,7 @@ public class Launcher {
 
     /**
      * Represents a launcher for the GUI.
-     * This class is adopted from SE JavaFX tutorial:
+     * This class is adopted from SE JavaFX tutorial.
      */
     public static void main(String[] args) {
         Application.launch(Main.class, args);

@@ -132,17 +132,13 @@ If there was no previous states, `undo` will do nothing, displaying:
 Oops! Something seems to be not working. Have you had any new actions added yet?
 ```
 
-### Save existing tasks: `save`
+### Save existing tasks: `bye`
 - Saves the list of tasks you currently have locally, 
 which will be loaded in the next time you start the application again.
-- Closing the window will not save the file.
+- Exits the application
 
-Format: `save`
+Format: `bye`
 
-If done successfully, the following will be shown:
-```
-Saved! Just in case your memory isn't as good as mine!
-```
 ### Installation
 1. Ensure you have Java `17` or above installed on your computer.
 2. Download the latest `.jar` file from [here](https://github.com/zhenglong1603/ip/releases/tag/A-Release).
