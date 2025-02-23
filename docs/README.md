@@ -107,7 +107,7 @@ Deletes a task at the specified index.
 Format: `delete <task_index>`
 - Deletes the task at the specified `task_index`. The index refers to the index number shown in the displayed
   task list. 
-- The index **must be a positive integer** 1,2,3... 
+- The index **must be a positive integer**.
 - The index must also be **within** the list size.
 
 Example: `delete 4` deletes the task at the 4th index in the list, displaying:
