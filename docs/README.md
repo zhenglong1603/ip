@@ -3,7 +3,7 @@
 ![Product Screenshot](./Ui.png)
 
 **ZBot** is here to help you stay organized and efficiently manage your tasks.
-Whether you need to set deadlines, track events, or handle recurring tasks, 
+Whether you need to set deadlines, track events,
 **ZBot** is ready to assist. Just give me the command, and I’ll help you create, 
 update, delete, and monitor your to-dos. Let's take control of your tasks and 
 boost your productivity!
