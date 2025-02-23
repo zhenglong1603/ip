@@ -23,14 +23,14 @@ Here's your to-do list! Looking busy, I see!
 2.[T][X] read a book
 ```
 
-### Marking and Unmarking tasks: `mark`, `unmark`
+### Mark and Unmark tasks: `mark`, `unmark`
 
-Marks and unmarks a task in the list respectively.
+Marks and unmarks a task in the task list respectively.
 
 Format: `mark/unmark <task_index>`
-- Marks or unmarks the task at the specified `task_index`. The index refers to the index number shown in the displayed
+- Marks or unmarks the task at the specified `task_index`. The index refers to the task index shown in the displayed
   task list. 
-- The index **must be a positive integer** 1,2,3...
+- The index **must be a positive integer**.
 - The index must also be **within** the list size.
 - The task will then be marked with [x] or [ ] when displayed depending on whether is it marked or unmarked.
 
@@ -46,8 +46,8 @@ Alright, back on the to-do list it goes!
 1.[T][] read a book
 ```
 
-### Searching for tasks by keyword: `find`
-Finds tasks whose description contain the keyword
+### Search for tasks by keyword: `find`
+Finds tasks whose description contains the keyword
 
 Format:`find <keyword>`
 - The search is case-sensitive. e.g`book` will not match `Book`
@@ -120,14 +120,15 @@ You have 7 tasks left in the list. Let's go!!
 ### Undo a command: `undo`
 Undo the previous command
 - This will restore your task list to its state before the last command was executed.
+- This command works for all commands except `list`, `find`, `undo` and `bye` 
 
 Format: `undo`
 
-Example: If there were previous states, `undo` will restore task list to state before, displaying:
+Example: If there were previous states, `undo` will restore task list to the state before, displaying:
 ```
 Rewinding time... Done!
 ```
-If there was no previous states, `undo` will do nothing, displaying:
+If there was no previous state, `undo` will do nothing, displaying:
 ```dtd
 Oops! Something seems to be not working. Have you had any new actions added yet?
 ```
