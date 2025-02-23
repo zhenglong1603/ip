@@ -84,7 +84,7 @@ Format: `event <description> /from <start_time> /to <end_time>`
 Example: `event attend class chalet /from 2024-12-24 /to 2024-12-25` creates
 ```
 Event locked in! Let's hope it's fun!
-[E][] attend class chalete (from: Dec 24 2024 to: Dec 25 2024)
+[E][] attend class chalet (from: Dec 24 2024 to: Dec 25 2024)
 You have 7 tasks in the list. Let's go!!
 ```
 
