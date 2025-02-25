@@ -44,6 +44,23 @@ public class DeadlineTask extends Task {
     }
 
     /**
+     * Creates a copy of the current task.
+     * This method is intended to return a new instance of the task with the same description and state.
+     *
+     * @return A new {@link Task} object with the same description and deadline as the current task.
+     */
+    @Override
+    public Task copy() {
+        DeadlineTask taskCopy = new DeadlineTask(this.getDescription(), this.getDeadline());
+        if (this.getDoneStatus()) {
+            taskCopy.markDone();
+        } else {
+            taskCopy.markUndone();
+        }
+        return taskCopy;
+    }
+
+    /**
      * Returns a string representation of the {@code DeadlineTask}.
      * The string includes the task's description, completion status, and deadline.
      *

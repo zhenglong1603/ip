@@ -25,9 +25,17 @@ public class MainWindow extends AnchorPane {
     private Image dukeImage = new
             Image(this.getClass().getResourceAsStream("/images/Cat.png"));
 
+    /**
+     * Initializes the Zbot GUI by setting up the dialog container and displaying an introductory message.
+     * This method is called during the initialization of the main window.
+     * It binds the scroll pane's vertical value property to the height of the dialog container
+     * and adds a welcome message from Zbot to the dialog container.
+     */
     @FXML
     public void initializeZbot() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        dialogContainer.getChildren().add(DialogBox.getZbotDialog(
+                "Hello! I'm ZoZo! How can I assist you today?", dukeImage));
     }
 
     /** Injects the Zbot instance */

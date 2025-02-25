@@ -16,6 +16,23 @@ public class ToDoTask extends Task {
     }
 
     /**
+     * Creates a copy of the current task.
+     * This method is intended to return a new instance of the task with the same description and state.
+     *
+     * @return A new {@link Task} object with the same description as the current task.
+     */
+    @Override
+    public Task copy() {
+        ToDoTask taskCopy = new ToDoTask(this.getDescription());
+        if (this.getDoneStatus()) {
+            taskCopy.markDone();
+        } else {
+            taskCopy.markUndone();
+        }
+        return taskCopy;
+    }
+
+    /**
      * Returns a string representation of the to-do task.
      * The format is "[T][status] description".
      *

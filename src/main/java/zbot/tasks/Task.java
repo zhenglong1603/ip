@@ -20,6 +20,15 @@ public abstract class Task {
     }
 
     /**
+     * Creates a copy of the current task.
+     * This method is intended to be overridden by subclasses of {@link Task}.
+     * It should return a new instance of the task with the same description and relevant state.
+     *
+     * @return A new {@link Task} object with the same description and relevant state as the current task.
+     */
+    public abstract Task copy();
+
+    /**
      * Marks the task as done.
      */
     public void markDone() {

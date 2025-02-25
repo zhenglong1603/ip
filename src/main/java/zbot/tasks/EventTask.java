@@ -69,6 +69,23 @@ public class EventTask extends Task {
     }
 
     /**
+     * Creates a copy of the current task.
+     * This method is intended to return a new instance of the task with the same description and state.
+     *
+     * @return A new {@link Task} object with the same description and dates as the current task.
+     */
+    @Override
+    public Task copy() {
+        EventTask taskCopy = new EventTask(this.getDescription(), this.getFromDate(), this.getToDate());
+        if (this.getDoneStatus()) {
+            taskCopy.markDone();
+        } else {
+            taskCopy.markUndone();
+        }
+        return taskCopy;
+    }
+
+    /**
      * Returns a string representation of the {@code EventTask}.
      * The string includes the task's description, completion status, and the event's date range.
      *

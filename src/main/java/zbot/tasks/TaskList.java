@@ -160,7 +160,11 @@ public class TaskList {
      *
      */
     private void saveStateForUndo() {
-        undoHistory.push(new ArrayList<>(taskList));
+        ArrayList<Task> taskListCopy = new ArrayList<>();
+        for (Task task : taskList) {
+            taskListCopy.add(task.copy());
+        }
+        undoHistory.push(taskListCopy);
     }
 
     /**

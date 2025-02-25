@@ -61,7 +61,8 @@ class Parser {
         public static Command getCommand(String input, TaskList taskList) throws Exception {
             String[] parts = input.split(" ", 2);
             final String supportedCommands =
-                    "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- undo\n- bye";
+                    "- list\n- mark\n- unmark\n- find\n- delete\n- todo\n- deadline\n- event\n- undo\n- bye\n\n"
+                    + "Date inputs are in the format of yyyy-MM-dd";
             switch (parts[0]) {
             case "list":
                 if (parts.length != 1) {
